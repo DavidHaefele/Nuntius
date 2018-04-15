@@ -11,17 +11,18 @@ export class HomePage {
   user: any = this.user;
   pass: any = this.pass;
   dataset: any = this.dataset;
-  testdata: string = "Hi";
-  querystring: any = "Php Query statement";
+  testdata: string = "";
+  querystring: any = "Changeme";
+  stringtest: any = "Moje";
 
   constructor(public navCtrl: NavController, public http: Http) {
   }
 
   getFunc() {
-    this.testdata = "hello there";
+    this.testdata = "Function executed";
 
     this.querystring = {
-      querystring: (): Promise<any> => {
+      phpdata: (): Promise<any> => {
         return this.http.get("./home.php").map(stringtest => {
           return stringtest.json();
         }).toPromise();
