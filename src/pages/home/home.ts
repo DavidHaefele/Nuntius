@@ -8,17 +8,24 @@ import 'rxjs/add/operator/map';
   templateUrl: 'home.html'
 })
 export class HomePage {
-    user: any = this.user;
-    pass: any = this.pass;
-    dataset: any = this.dataset;
+  user: any = this.user;
+  pass: any = this.pass;
+  dataset: any = this.dataset;
+  testdata: string = "Hi";
+  querystring: any = "Php Query statement";
 
-    constructor(public navCtrl: NavController, public http: Http) {
-    }
+  constructor(public navCtrl: NavController, public http: Http) {
+  }
 
-    getFunc() {
-        this.http.get('./home.php').map(res => res.json()).subscribe(data => {
-            console.log(data);
-            this.dataset = data;
-        });
+  getFunc() {
+    this.testdata = "hello there";
+
+    this.querystring = {
+      querystring: (): Promise<any> => {
+        return this.http.get("./home.php").map(stringtest => {
+          return stringtest.json();
+        }).toPromise();
+      }
     }
+  }
 }
