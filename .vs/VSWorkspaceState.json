@@ -4,10 +4,8 @@
     "\\src",
     "\\src\\app",
     "\\src\\pages",
-    "\\src\\pages\\home",
-    "\\src\\providers",
-    "\\src\\providers\\http"
+    "\\src\\pages\\home"
   ],
-  "SelectedNode": "\\src\\providers\\http\\http.ts",
+  "SelectedNode": "\\src\\providers",
   "PreviewInSolutionExplorer": false
 }
