@@ -11,6 +11,7 @@ export class HomePage {
     user: any = this.user;
     pass: any = this.pass;
     dataset: any = this.dataset;
+  testvariable: any = 20;
 
     constructor(public navCtrl: NavController, public http: Http) {
     }
