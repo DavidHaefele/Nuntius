@@ -1,0 +1,5 @@
+<ion-tabs [color]="isAndroid ? 'royal' : 'primary'">
+  <ion-tab [root]="tab1Root" tabIcon="log-in"></ion-tab> <!--tabTitle="Anmelden"-->
+  <ion-tab id="badges" [root]="tab3Root" tabIcon="chatboxes" tabBadge="{{badges}}" tabBadgeStyle="danger"></ion-tab> <!--tabTitle="Kontakte"-->
+  <ion-tab [root]="tab2Root" tabIcon="settings"></ion-tab> <!--tabTitle="Einstellungen"-->
+</ion-tabs>

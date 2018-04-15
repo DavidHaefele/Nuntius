@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Kontakte</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let item of items" (click)="openNavDetailsPage(item)">
+      <ion-avatar item-start>
+        <img src="{{item.img}}">
+      </ion-avatar>
+        <h2>{{ item.name }}</h2>
+        <h4>{{item.description}}</h4>
+        <p>{{item.msgIn}}</p>
+</button>
+  </ion-list>
+</ion-content>
