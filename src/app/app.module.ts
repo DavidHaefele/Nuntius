@@ -11,8 +11,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpProvider } from '../providers/http/http';
-import { HttpModule } from '@angular/http';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 
 @NgModule({
@@ -26,8 +25,7 @@ import { HttpModule } from '@angular/http';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
-    HttpModule
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +40,8 @@ import { HttpModule } from '@angular/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HttpProvider
+    SQLite,
+    SQLiteObject
   ]
 })
 export class AppModule {}
