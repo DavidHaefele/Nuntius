@@ -6,6 +6,6 @@
     "\\src\\pages",
     "\\src\\pages\\home"
   ],
-  "SelectedNode": "\\src\\providers",
+  "SelectedNode": "\\src\\app\\app.module.ts",
   "PreviewInSolutionExplorer": false
 }
