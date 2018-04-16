@@ -1,24 +1,30 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { SQLite } from '@ionic-native/sqlite';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-    user: any = this.user;
-    pass: any = this.pass;
-    dataset: any = this.dataset;
+  user: any = this.user;
+  pass: any = this.pass;
 
-    constructor(public navCtrl: NavController, public http: Http) {
-    }
+  constructor(public navCtrl: NavController, public sqlite: SQLite) {
+  }
 
-    getFunc() {
-        this.http.get('./home.php').map(res => res.json()).subscribe(data => {
-            console.log(data);
-            this.dataset = data;
-        });
-    }
+  getFunc() {
+    this.sqlite.create({
+      name: 'data.db',
+      location: 'default'
+    })
+      .then((db: SQLiteObject) => {
+
+
+        db.executeSql('create table danceMoves(name VARCHAR(32))', {})
+          .then(() => console.log('Executed SQL'))
+          .catch(e => console.log(e));
+      })
+      .catch(e => alert(e));
+  }
 }
