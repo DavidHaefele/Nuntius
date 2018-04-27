@@ -11,7 +11,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 
 @NgModule({
@@ -40,8 +39,6 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SQLite,
-    SQLiteObject
   ]
 })
 export class AppModule {}
