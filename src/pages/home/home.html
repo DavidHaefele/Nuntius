@@ -1,22 +1,15 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Nuntius</ion-title>
-  </ion-navbar>
-</ion-header>
+
 
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-label stacked>Nutzername</ion-label>
-      <ion-input type="text" [(ngModel)]="user"></ion-input>
+      <ion-label fixed>Username</ion-label>
+      <ion-input type="text" value="" [(ngModel)]="userData.username"></ion-input>
     </ion-item>
-
     <ion-item>
-      <ion-label stacked>Passwort</ion-label>
-      <ion-input type="password" [(ngModel)]="pass"></ion-input>
+      <ion-label fixed>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
     </ion-item>
-
-    <div padding>
-      <button ion-button color="primary" block (click)="getFunc()">Anmelden</button>
-    </div>
-
+    <button ion-button block color="primary" (click)="login()">Login</button>
+  </ion-list>
+</ion-content>

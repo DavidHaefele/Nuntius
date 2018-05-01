@@ -2,7 +2,9 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { AuthService } from '../providers/auth-service';
 
+import { HttpModule } from "@angular/http";
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { NavigationDetailsPage } from '../pages/details/details';
@@ -11,10 +13,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-<<<<<<< HEAD
-import { SQLite} from '@ionic-native/sqlite';
-=======
->>>>>>> 40a5b72b4c3417ca3ab81d6a34b0825e08dfd730
+
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 
 
 @NgModule({
@@ -27,7 +27,7 @@ import { SQLite} from '@ionic-native/sqlite';
     TabsPage
   ],
   imports: [
-    BrowserModule,
+    BrowserModule, HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -41,12 +41,9 @@ import { SQLite} from '@ionic-native/sqlite';
   ],
   providers: [
     StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-<<<<<<< HEAD
-    SQLite
-=======
->>>>>>> 40a5b72b4c3417ca3ab81d6a34b0825e08dfd730
+    SplashScreen, AuthService,
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    AuthServiceProvider
   ]
 })
 export class AppModule {}

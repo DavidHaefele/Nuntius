@@ -2,16 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 /*
-  Generated class for the HttpProvider provider.
+  Generated class for the AuthServiceProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
 @Injectable()
-export class HttpProvider {
+export class AuthServiceProvider {
 
   constructor(public http: HttpClient) {
-    console.log('Hello HttpProvider Provider');
+    console.log('Hello AuthServiceProvider Provider');
   }
 
 }
