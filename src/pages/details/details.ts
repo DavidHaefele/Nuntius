@@ -7,7 +7,7 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class NavigationDetailsPage {
     item;
-    msgOut: any = this.msgOut;
+    msgOut: String = this.msgOut;
 
     constructor(params: NavParams) {
         this.item = params.data.item;
