@@ -1,63 +1,46 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
-import { TabsPage } from '../tabs/tabs';
+import { Component, ViewChild } from "@angular/core";
+import { NavController, App, AlertController } from "ionic-angular";
 import { AuthService } from "../../providers/auth-service";
+//import { Common } from "../../providers/common";
 
-/**
- * Generated class for the Login page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
-@Component({
-  selector: 'page-home',
-  templateUrl: 'home.html',
-})
+@Component({ selector: "page-home", templateUrl: "home.html" })
 export class HomePage {
+  @ViewChild("updatebox") updatebox;
+  public userDetails: any;
+  public resposeData: any;
+  public dataSet: any;
+  userPostData = {
+    user_id: "",
+    token: "",
+  };
 
-  resposeData: any;
-  userData = { "username": "", "password": "" };
-
-  constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController) {
+  constructor(
+    //public common: Common,
+    private alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public app: App,
+    public authService: AuthService
+  ) {
+    const data = JSON.parse(localStorage.getItem("userData"));
+    this.userDetails = data.userData;
+    this.userPostData.user_id = this.userDetails.user_id;
+    this.userPostData.token = this.userDetails.token;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Login');
+  converTime(time) {
+    let a = new Date(time * 1000);
+    return a;
   }
 
-  login() {
-    if (this.userData.username && this.userData.password) {
-      this.authService.postData(this.userData, "login").then((result) => {
-        this.resposeData = result;
-        console.log(this.resposeData);
-        if (this.resposeData.userData) {
-          localStorage.setItem('userData', JSON.stringify(this.resposeData))
-          this.navCtrl.push(TabsPage);
-        }
-        else {
-          this.presentToast("Please give valid username and password");
-        }
-
-
-
-      }, (err) => {
-        //Connection failed message
-      });
-    }
-    else {
-      this.presentToast("Give username and password");
-    }
-
+  backToWelcome() {
+    const root = this.app.getRootNav();
+    root.popToRoot();
   }
 
+  logout() {
+    //Api Token Logout
 
-  presentToast(msg) {
-    let toast = this.toastCtrl.create({
-      message: msg,
-      duration: 2000
-    });
-    toast.present();
+    localStorage.clear();
+    setTimeout(() => this.backToWelcome(), 1000);
   }
-
 }

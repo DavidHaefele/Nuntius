@@ -5,7 +5,7 @@ import { NavController, NavParams } from 'ionic-angular';
     selector: 'page-details',
     templateUrl: 'details.html',
 })
-export class NavigationDetailsPage {
+export class Details {
     item;
     msgOut: String = this.msgOut;
 

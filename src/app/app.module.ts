@@ -5,10 +5,12 @@ import { MyApp } from './app.component';
 import { AuthService } from '../providers/auth-service';
 
 import { HttpModule } from "@angular/http";
+import { Welcome } from '../pages/welcome/welcome';
+import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { NavigationDetailsPage } from '../pages/details/details';
-import { HomePage } from '../pages/home/home';
+import { Details } from '../pages/details/details';
+import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -20,10 +22,12 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 @NgModule({
   declarations: [
     MyApp,
+    Welcome,
     AboutPage,
     ContactPage,
-    NavigationDetailsPage,
     HomePage,
+    Details,
+    Login,
     TabsPage
   ],
   imports: [
@@ -33,10 +37,12 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    Welcome,
     AboutPage,
     ContactPage,
-    NavigationDetailsPage,
     HomePage,
+    Details,
+    Login,
     TabsPage
   ],
   providers: [

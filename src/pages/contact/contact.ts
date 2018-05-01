@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { NavigationDetailsPage } from '../details/details';
+import { Details } from '../details/details';
 
 @Component({
     selector: 'page-contact',
@@ -34,6 +34,6 @@ export class ContactPage {
     }
 
     openNavDetailsPage(item) {
-        this.nav.push(NavigationDetailsPage, { item: item });
+        this.nav.push(Details, { item: item });
     }
 }

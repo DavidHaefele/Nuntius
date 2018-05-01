@@ -1,15 +1,16 @@
-
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <img ion-right src="assets/imgs/bananalogo.png" class="navbarLogo" />
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-label fixed>Username</ion-label>
-      <ion-input type="text" value="" [(ngModel)]="userData.username"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label fixed>Password</ion-label>
-      <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
-    </ion-item>
-    <button ion-button block color="primary" (click)="login()">Login</button>
-  </ion-list>
+  <h2>Welcome to {{userDetails.username}}</h2>
+
+  <p><br /><br />You successfully logged in!</p>
+
 </ion-content>
