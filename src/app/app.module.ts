@@ -10,6 +10,7 @@ import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { Details } from '../pages/details/details';
+import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -27,6 +28,7 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     ContactPage,
     HomePage,
     Details,
+    Signup,
     Login,
     TabsPage
   ],
@@ -42,6 +44,7 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     ContactPage,
     HomePage,
     Details,
+    Signup,
     Login,
     TabsPage
   ],

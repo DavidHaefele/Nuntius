@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 //let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
-let apiUrl = 'http://localhost/PHP-Slim-Restful/api/';
+let apiUrl = 'http://10.2.1.63/PHP-Slim-Restful/api/';
 /*
   Generated class for the AuthService provider.
 

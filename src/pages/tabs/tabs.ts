@@ -8,9 +8,9 @@ import { HomePage } from '../home/home';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  
-  tab1Root = AboutPage;
-  tab2Root = ContactPage;
+
+  tab1Root = ContactPage;
+  tab2Root = AboutPage;
 
   badges;
 
