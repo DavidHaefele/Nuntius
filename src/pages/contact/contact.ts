@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component} from '@angular/core';
+import { NavController, NavParams, App } from 'ionic-angular';
 import { Details } from '../details/details';
+import { AuthService } from "../../providers/auth-service";
 
 @Component({
     selector: 'page-contact',
@@ -9,7 +10,8 @@ import { Details } from '../details/details';
 export class ContactPage {
     items = [];
 
-    constructor(public nav: NavController) {
+  constructor(public nav: NavController, public app: App, public authService: AuthService) {
+
         this.items = [
             {
                 'name': 'Max',
@@ -36,4 +38,21 @@ export class ContactPage {
     openNavDetailsPage(item) {
         this.nav.push(Details, { item: item });
     }
+
+  converTime(time) {
+    let a = new Date(time * 1000);
+    return a;
+  }
+
+  backToWelcome() {
+    const root = this.app.getRootNav();
+    root.popToRoot();
+  }
+
+  logout() {
+    //Api Token Logout
+
+    localStorage.clear();
+    setTimeout(() => this.backToWelcome(), 1000);
+  }
 }

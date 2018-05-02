@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { AuthService } from '../providers/auth-service';
+import { SplitPane } from '../providers/split-pane';
 
 import { HttpModule } from "@angular/http";
 import { Welcome } from '../pages/welcome/welcome';
@@ -50,7 +51,7 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
   ],
   providers: [
     StatusBar,
-    SplashScreen, AuthService,
+    SplashScreen, AuthService, SplitPane,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthServiceProvider
   ]

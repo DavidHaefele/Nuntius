@@ -19,9 +19,9 @@ export class Welcome {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    /*if (localStorage.getItem('userData')) {
+    if (localStorage.getItem('userData')) {
       this.navCtrl.setRoot(TabsPage);
-    }*/
+    }
 
   }
 
