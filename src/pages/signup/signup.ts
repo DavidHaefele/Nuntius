@@ -15,6 +15,7 @@ import { Login } from "../login/login";
 @Component({ selector: 'page-signup', templateUrl: 'signup.html' })
 export class Signup {
   resposeData: any;
+  moje: any = 345;
   userData = { "username": "", "password": "" };
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController) { }
 

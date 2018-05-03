@@ -14,12 +14,17 @@
         <p>{{ item.msgIn }}</p>
       </ion-card-content>
     </ion-card>
+    <ion-card class="absolute" color="primary">
+      <ion-card-content>
+        <p>{{ data }}</p>
+      </ion-card-content>
+    </ion-card>
 
       <div class="absolute">
         <ion-item>
           <ion-label stacked>Nachricht</ion-label>
-          <ion-input type="text" [(ngModel)]="msgOut"></ion-input>
+          <ion-input type="text" [(ngModel)]="msgOut.message"></ion-input>
         </ion-item>
       </div>
-      <button ion-button round class="absolute"><small>Senden</small></button>
+      <button ion-button round class="absolute" (click)="msgSend()"><small>Senden</small></button>
 </ion-content>
