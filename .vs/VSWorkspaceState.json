@@ -2,16 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\app",
     "\\src\\pages",
     "\\src\\pages\\contact",
     "\\src\\pages\\details",
     "\\src\\pages\\home",
-    "\\src\\pages\\login",
-    "\\src\\pages\\signup",
-    "\\src\\pages\\tabs",
     "\\src\\pages\\welcome",
-    "\\src\\theme"
+    "\\src\\providers"
   ],
-  "SelectedNode": "\\src\\pages\\welcome\\welcome.html",
+  "SelectedNode": "\\src\\pages\\details\\details.ts",
   "PreviewInSolutionExplorer": false
 }
