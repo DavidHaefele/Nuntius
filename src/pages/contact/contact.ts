@@ -13,45 +13,47 @@ export class ContactPage {
   userData = { "username": "" };
   user: String;
   items = [];
+  Contactarray = [];
+  Contacts = [];
   resp: any;
+  i: number;
+  b: number;
+  isCalled: Boolean = false;
+  arraylength: number;
   ownname = this.storageH.getUsername();
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
         
-        
-        this.items = [
-            {
-                'name': 'Max',
-                'description': 'A default guy.',
-                'img': '../assets/icon/chat.svg.png',
-                'msgIn': 'Hello, how are you?'
-            },
-            {
-                'name': 'Lisa',
-                'description': 'She has a common girls name.',
-                'img': '../assets/icon/chat.svg.png',
-                'msgIn': 'Can we meet in the afternoon?'
-            },
-            {
-                'name': 'David',
-                'description': 'Has the best name ever!',
-                'img': '../assets/icon/chat.svg.png',
-                'msgIn': 'Yes, i am bored too...'
-            }
-        ]
+    this.getContacts();
         
   }
 
   getContacts() {
+    this.isCalled = true;
     this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
         this.responseData = result;
         console.log(this.responseData);
         if (this.responseData.userData) {
-          this.presentToast(JSON.stringify(this.responseData.userData));
+          //this.presentToast(JSON.stringify(this.responseData.userData));
           this.resp = JSON.stringify(this.responseData.userData);
-
+          this.Contacts = this.resp.split(":");
+          this.Contacts[0] = this.Contacts[0].substring(1);
+          this.Contacts.pop();
+          this.arraylength = this.Contacts.length;
+          this.i = 0;
+          while (this.Contacts.length != this.arraylength / 2) {
+        
+            if (this.Contacts[this.i] == this.ownname) {
+              this.Contacts.splice(this.i, 1);
+            }
+            this.i++;
+          }
+          this.Contactarray = this.Contacts;
+          for (this.b = 0; this.b < this.Contactarray.length; this.b++) {
+            this.items.push({ 'name': this.Contactarray[this.b] });
+          }
         }
         else {
           this.presentToast("Not found");
