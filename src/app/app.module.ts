@@ -19,6 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { StorageHandlerProvider } from '../providers/storage-handler/storage-handler';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     StatusBar,
     SplashScreen, AuthService, SplitPane,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthServiceProvider
+    AuthServiceProvider,
+    StorageHandlerProvider
   ]
 })
 export class AppModule {}

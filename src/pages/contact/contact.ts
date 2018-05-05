@@ -2,6 +2,7 @@ import { Component} from '@angular/core';
 import { NavController, NavParams, App, ToastController } from 'ionic-angular';
 import { Details } from '../details/details';
 import { AuthService } from "../../providers/auth-service";
+import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 
 @Component({
     selector: 'page-contact',
@@ -12,8 +13,9 @@ export class ContactPage {
   userData = { "username": "Urmel"};
   items = [];
   resp: any;
+  contacts = [];
 
-  constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController) {
+  constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
 
         this.items = [
             {
@@ -34,22 +36,21 @@ export class ContactPage {
                 'img': '../assets/icon/chat.svg.png',
                 'msgIn': 'Yes, i am bored too...'
             }
-    ]
-    this.presentToast("Kein Bock, alta");
+        ]
+        
   }
 
   getContacts() {
-    this.presentToast("Tescht");
     if (this.userData.username) {
-      this.presentToast("Hsdasdfsf");
       this.authService.postData(this.userData, "getContacts").then((result) => {
-        this.presentToast("Hi");
         this.responseData = result;
         console.log(this.responseData);
         if (this.responseData.userData) {
-          //localStorage.setItem('userData', JSON.stringify(this.resposeData))
-          this.presentToast("" + this.responseData.userData);
-          this.resp = JSON.stringify(this.responseData.userData);
+          this.presentToast(JSON.stringify(this.responseData.userData.identifier));
+          this.resp = JSON.stringify(this.responseData.userData.identifier);
+
+          
+
         }
         else {
           this.presentToast("Not found");
@@ -63,7 +64,6 @@ export class ContactPage {
     else {
       this.presentToast("Else");
     }
-
   }
 
     openNavDetailsPage(item) {
@@ -90,7 +90,7 @@ export class ContactPage {
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: 2000
+      duration: 10000
     });
     toast.present();
   }
