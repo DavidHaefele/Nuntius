@@ -10,7 +10,8 @@ import { StorageHandlerProvider } from '../../providers/storage-handler/storage-
 })
 export class ContactPage {
   responseData: any;
-  userData = { "username": "Urmel"};
+  userData = { "username": "" };
+  user: String;
   items = [];
   resp: any;
   contacts = [];
@@ -41,14 +42,14 @@ export class ContactPage {
   }
 
   getContacts() {
+    this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
         this.responseData = result;
         console.log(this.responseData);
-        if (this.responseData) {
-          this.presentToast(JSON.stringify(this.responseData));
-          this.resp = JSON.stringify(this.responseData.userData
-          
+        if (this.responseData.userData) {
+          this.presentToast(JSON.stringify(this.responseData.userData));
+          this.resp = JSON.stringify(this.responseData.userData);
 
         }
         else {

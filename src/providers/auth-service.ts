@@ -23,7 +23,7 @@ export class AuthService {
       let headers = new Headers();
       this.http.post(apiUrl + type, JSON.stringify(credentials), { headers: headers }).
         subscribe(res => {
-          resolve(res);
+          resolve(res.json());
         }, (err) => {
           reject(err);
         });
