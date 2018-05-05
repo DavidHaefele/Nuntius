@@ -14,10 +14,11 @@ export class ContactPage {
   user: String;
   items = [];
   resp: any;
-  contacts = [];
+  ownname = this.storageH.getUsername();
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
-
+        
+        
         this.items = [
             {
                 'name': 'Max',
