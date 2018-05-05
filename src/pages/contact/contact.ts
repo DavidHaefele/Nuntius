@@ -45,10 +45,9 @@ export class ContactPage {
       this.authService.postData(this.userData, "getContacts").then((result) => {
         this.responseData = result;
         console.log(this.responseData);
-        if (this.responseData.userData) {
-          this.presentToast(JSON.stringify(this.responseData.userData.identifier));
-          this.resp = JSON.stringify(this.responseData.userData.identifier);
-
+        if (this.responseData) {
+          this.presentToast(JSON.stringify(this.responseData));
+          this.resp = JSON.stringify(this.responseData.userData
           
 
         }

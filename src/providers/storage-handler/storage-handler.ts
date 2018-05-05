@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 /*
@@ -13,7 +12,7 @@ export class StorageHandlerProvider {
   usr: any;
   data: String = "";
 
-  constructor(public http: HttpClient) {
+  constructor() {
 
   }
 
