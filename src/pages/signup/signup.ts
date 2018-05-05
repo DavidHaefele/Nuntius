@@ -15,7 +15,6 @@ import { Login } from "../login/login";
 @Component({ selector: 'page-signup', templateUrl: 'signup.html' })
 export class Signup {
   resposeData: any;
-  moje: any = 345;
   userData = { "username": "", "password": "" };
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController) { }
 
@@ -34,7 +33,7 @@ export class Signup {
           this.navCtrl.push(TabsPage);
         }
         else {
-          this.presentToast("Please give valid username and password");
+          this.presentToast("A MySQL error occurred");
         }
 
       }, (err) => {

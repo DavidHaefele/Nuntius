@@ -7,10 +7,10 @@
     "\\src\\pages\\contact",
     "\\src\\pages\\details",
     "\\src\\pages\\home",
-    "\\src\\providers",
-    "\\src\\providers\\auth-service",
-    "\\src\\providers\\split-pane"
+    "\\src\\pages\\login",
+    "\\src\\pages\\signup",
+    "\\src\\providers"
   ],
-  "SelectedNode": "\\src\\providers\\auth-service\\auth-service.ts",
+  "SelectedNode": "\\src\\app\\app.html",
   "PreviewInSolutionExplorer": false
 }
