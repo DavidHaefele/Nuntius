@@ -28,7 +28,6 @@ export class Signup {
       this.authService.postData(this.userData, "signup").then((result) => {
         this.resposeData = result;
         if (this.resposeData.userData) {
-          console.log(this.resposeData);
           localStorage.setItem('userData', JSON.stringify(this.resposeData))
           this.navCtrl.push(TabsPage);
         }
