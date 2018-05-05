@@ -9,9 +9,8 @@
     "\\src\\pages\\home",
     "\\src\\pages\\login",
     "\\src\\pages\\signup",
-    "\\src\\providers",
-    "\\src\\providers\\storage-handler"
+    "\\src\\pages\\welcome"
   ],
-  "SelectedNode": "\\src\\providers\\storage-handler\\storage-handler.ts",
+  "SelectedNode": "\\src\\pages\\welcome\\welcome.ts",
   "PreviewInSolutionExplorer": false
 }

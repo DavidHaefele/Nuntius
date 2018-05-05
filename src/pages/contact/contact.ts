@@ -11,14 +11,12 @@ import { StorageHandlerProvider } from '../../providers/storage-handler/storage-
 export class ContactPage {
   responseData: any;
   userData = { "username": "" };
-  user: String;
   items = [];
   Contactarray = [];
   Contacts = [];
   resp: any;
   i: number;
   b: number;
-  isCalled: Boolean = false;
   arraylength: number;
   ownname = this.storageH.getUsername();
 
@@ -29,7 +27,6 @@ export class ContactPage {
   }
 
   getContacts() {
-    this.isCalled = true;
     this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
