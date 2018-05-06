@@ -31,7 +31,7 @@ export class ContactPage {
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
         this.responseData = result;
-        console.log(this.responseData);
+
         if (this.responseData.userData) {
           //this.presentToast(JSON.stringify(this.responseData.userData));
           this.resp = JSON.stringify(this.responseData.userData);
