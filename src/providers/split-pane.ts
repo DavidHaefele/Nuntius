@@ -14,7 +14,7 @@ export class SplitPane {
 
   constructor(public platform: Platform) {
     console.log('Hello SplitPane Provider');
-    this.splitPaneState = false;
+    this.splitPaneState = true;
   }
 
   getSplitPane() {

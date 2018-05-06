@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Platform, App, MenuController } from 'ionic-angular';
+import { Platform, App, MenuController, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Welcome } from '../pages/welcome/welcome';
 import { SplitPane } from '../providers/split-pane';
+import { AddContact } from '../pages/addcontact/addcontact';
 
 @Component({
   templateUrl: 'app.html'
@@ -11,7 +12,7 @@ import { SplitPane } from '../providers/split-pane';
 export class MyApp {
   rootPage:any = Welcome;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public splitPane: SplitPane, public app: App, public menu: MenuController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public splitPane: SplitPane, public app: App, public menu: MenuController, public nav: NavController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -32,5 +33,9 @@ export class MyApp {
     this.menu.enable(false);
     setTimeout(() => this.backToWelcome(), 1000);
 
+  }
+
+  addContact() {
+    this.nav.push(AddContact);
   }
 }

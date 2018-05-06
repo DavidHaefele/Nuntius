@@ -14,6 +14,7 @@ import { Details } from '../pages/details/details';
 import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
+import { AddContact } from '../pages/addcontact/addcontact';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -32,6 +33,7 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
     Details,
     Signup,
     Login,
+    AddContact,
     TabsPage
   ],
   imports: [
@@ -48,6 +50,7 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
     Details,
     Signup,
     Login,
+    AddContact,
     TabsPage
   ],
   providers: [

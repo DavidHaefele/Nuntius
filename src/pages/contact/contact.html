@@ -10,10 +10,11 @@
   <ion-list>
     <button ion-item *ngFor="let item of items" (click)="openNavDetailsPage(item)">
       <ion-avatar item-start>
-        <img src="{{item.img}}">
+        <img src="../assets/icon/chat.svg.png">
       </ion-avatar>
       <h2><b>{{ item.name }}</b></h2>
       <p>{{item.msgIn}}</p>
     </button>
   </ion-list>
+  <h2><p style="text-align: center; color: grey; padding-top: center">{{ empty }}</p></h2>
 </ion-content>

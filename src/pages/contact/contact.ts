@@ -1,7 +1,9 @@
-import { Component} from '@angular/core';
-import { NavController, NavParams, App, ToastController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams, App, ToastController, MenuController } from 'ionic-angular';
 import { Details } from '../details/details';
 import { AuthService } from "../../providers/auth-service";
+import { SplitPane } from '../../providers/split-pane';
+import { AddContact } from '../addcontact/addcontact';
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 
 @Component({
@@ -19,9 +21,12 @@ export class ContactPage {
   b: number;
   arraylength: number;
   ownname = this.storageH.getUsername();
+  empty: String;
 
-  constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
-        
+  constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, public splitPane: SplitPane, public menu: MenuController) {
+
+    this.menu.enable(true);
+    this.splitPane.splitPaneState = true;
     this.getContacts();
         
   }
@@ -53,7 +58,7 @@ export class ContactPage {
           }
         }
         else {
-          this.presentToast("Not found");
+          this.empty = "It looks empty here :/";
         }
 
       }, (err) => {
@@ -94,4 +99,5 @@ export class ContactPage {
     });
     toast.present();
   }
+
 }
