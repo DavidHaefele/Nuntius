@@ -19,12 +19,18 @@ export class AddContact {
 
   items = [];
   i: number;
-  resposeData: any;
+  responseData: any;
   userData = { "username": "" };
   resp: any;
   friends = [];
+
   friend: any;
   ownname: any;
+  conv = [];
+  convstr: any;
+  responseDataC: any;
+  respC: any;
+  userDataC = {"conv": ""};
 
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
   }
@@ -35,10 +41,10 @@ export class AddContact {
 
   getFriend() {
     if (this.userData.username) {
-      this.authService.postData(this.userData, "getFriends").then((result) => {
-        this.resposeData = result;
-        if (this.resposeData.userData) {
-          this.resp = JSON.stringify(this.resposeData.userData);
+      this.authService.postData(this.userData, "getFriend").then((result) => {
+        this.responseData = result;
+        if (this.responseData.userData) {
+          this.resp = JSON.stringify(this.responseData.userData);
           this.friends = this.resp.split(":");
           this.friends[0] = this.friends[0].substring(1);
           this.friends.pop();
@@ -64,6 +70,39 @@ export class AddContact {
     this.friend = item.name;
     this.ownname = this.storageH.getUsername();
 
+    this.conv.push({"username": this.friend.toString() });
+    this.conv.push({ "username": this.ownname.toString() });
+
+    this.conv.sort(function (a, b) {
+      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
+    this.convstr = this.conv[0].username + ":" + this.conv[1].username;
+    this.userDataC.conv = this.convstr;
+    this.presentToast(this.userDataC.conv);
+
+    if (this.userDataC.conv) {
+      this.authService.postData(this.userDataC, "addConv").then((result) => {
+        this.responseDataC = result;
+        if (this.responseDataC.userDataC) {
+          this.respC = JSON.stringify(this.responseDataC.userDataC);
+          this.presentToast(this.responseDataC.userDataC);
+        }
+        else {
+          this.presentToast("Could not add friend");
+        }
+      }, (err) => {
+        //Connection failed message
+      });
+    }
+    else {
+      this.presentToast("Bad Error");
+    }
 
   }
 
@@ -71,7 +110,7 @@ export class AddContact {
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: 2000
+      duration: 3000
     });
     toast.present();
   }
