@@ -3,8 +3,8 @@ import { NavController, NavParams, App, ToastController, MenuController } from '
 import { Details } from '../details/details';
 import { AuthService } from "../../providers/auth-service";
 import { SplitPane } from '../../providers/split-pane';
-import { AddContact } from '../addcontact/addcontact';
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { AddContact } from '../addcontact/addcontact';
 
 @Component({
     selector: 'page-contact',
@@ -14,7 +14,6 @@ export class ContactPage {
   responseData: any;
   userData = { "username": "" };
   items = [];
-  Contactarray = [];
   Contacts = [];
   resp: any;
   i: number;
@@ -22,6 +21,8 @@ export class ContactPage {
   arraylength: number;
   ownname = this.storageH.getUsername();
   empty: String;
+  friends = [];
+  friend: any;
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, public splitPane: SplitPane, public menu: MenuController) {
 
@@ -52,9 +53,8 @@ export class ContactPage {
             }
             this.i++;
           }
-          this.Contactarray = this.Contacts;
-          for (this.b = 0; this.b < this.Contactarray.length; this.b++) {
-            this.items.push({ 'name': this.Contactarray[this.b] });
+          for (this.b = 0; this.b < this.Contacts.length; this.b++) {
+            this.items.push({ 'name': this.Contacts[this.b] });
           }
         }
         else {
@@ -75,23 +75,6 @@ export class ContactPage {
         this.nav.push(Details, { item: item });
     }
 
-  converTime(time) {
-    let a = new Date(time * 1000);
-    return a;
-  }
-
-  backToWelcome() {
-    const root = this.app.getRootNav();
-    root.popToRoot();
-  }
-
-  logout() {
-    //Api Token Logout
-
-    localStorage.clear();
-    setTimeout(() => this.backToWelcome(), 1000);
-  }
-
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
@@ -100,4 +83,7 @@ export class ContactPage {
     toast.present();
   }
 
+  addContact() {
+    this.nav.push(AddContact);
+  }
 }

@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler, NavController } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { AuthService } from '../providers/auth-service';
 import { SplitPane } from '../providers/split-pane';
@@ -34,7 +34,7 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
     Signup,
     Login,
     AddContact,
-    TabsPage
+    TabsPage,
   ],
   imports: [
     BrowserModule, HttpModule,
