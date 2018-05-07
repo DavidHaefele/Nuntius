@@ -68,6 +68,7 @@ export class AddContact {
   }
 
   addFriend(item) {
+    this.items = [];
     this.friend = item.name;
     this.ownname = this.storageH.getUsername();
 
@@ -85,15 +86,16 @@ export class AddContact {
 
     this.convstr = this.conv[0].username + ":" + this.conv[1].username;
     this.userDataC.conv = this.convstr;
-    //this.presentToast(this.userDataC.conv);
+
 
     if (this.userDataC.conv) {
-      //this.presentToast("Now adding: " + this.userDataC.conv);
       this.authService.postData(this.userDataC, "addConv").then((result) => {
         this.responseDataC = result;
         if (this.responseDataC.userDataC) {
           this.respC = JSON.stringify(this.responseDataC.userDataC);
           this.presentToast(item.name + " hinzugefügt");
+          this.navCtrl.pop();
+
         }
         else {
           this.presentToast("Could not add friend");

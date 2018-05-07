@@ -33,6 +33,7 @@ export class ContactPage {
   }
 
   getContacts() {
+    this.items = [];
     this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
@@ -74,6 +75,16 @@ export class ContactPage {
     openNavDetailsPage(item) {
         this.nav.push(Details, { item: item });
     }
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    this.getContacts();
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
+  }
 
   presentToast(msg) {
     let toast = this.toastCtrl.create({
