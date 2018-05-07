@@ -34,7 +34,7 @@ export class ContactPage {
   }
 
   getContacts() {
-    this.items = [{ 'name': "Halvar" }];
+    this.items = [];
     this.finalcontacts = [];
     this.Contacts = [];
     this.userData.username = this.storageH.getUsername().toString();
