@@ -7,18 +7,19 @@ import { StorageHandlerProvider } from '../../providers/storage-handler/storage-
 import { AddContact } from '../addcontact/addcontact';
 
 @Component({
-    selector: 'page-contact',
-    templateUrl: 'contact.html'
+  selector: 'page-contact',
+  templateUrl: 'contact.html'
 })
 export class ContactPage {
   responseData: any;
   userData = { "username": "" };
   items = [];
   Contacts = [];
+  finalcontacts = [];
   resp: any;
-  i: number;
+  i: number = 0;
   b: number;
-  arraylength: number;
+  x: number;
   ownname = this.storageH.getUsername();
   empty: String;
   friends = [];
@@ -29,7 +30,7 @@ export class ContactPage {
     this.menu.enable(true);
     this.splitPane.splitPaneState = true;
     this.getContacts();
-        
+
   }
 
   getContacts() {
@@ -42,24 +43,30 @@ export class ContactPage {
         if (this.responseData.userData) {
           //this.presentToast(JSON.stringify(this.responseData.userData));
           this.resp = JSON.stringify(this.responseData.userData);
+          console.log(this.resp);
           this.Contacts = this.resp.split(":");
           this.Contacts[0] = this.Contacts[0].substring(1);
+          console.log(this.Contacts);
           this.Contacts.pop();
-          this.arraylength = this.Contacts.length;
-          this.i = 0;
-          while (this.Contacts.length != this.arraylength / 2) {
-        
-            if (this.Contacts[this.i] == this.ownname) {
-              this.Contacts.splice(this.i, 1);
+          console.log(this.Contacts);
+
+          for (this.x = 0; this.x < this.Contacts.length; this.x++) {
+
+            if (this.Contacts[this.x] != this.ownname) {
+              console.log(this.Contacts[this.x] + " entspricht nicht " + this.ownname);
+              this.finalcontacts[this.i] = this.Contacts[this.x];
+              this.i++;
+            } else {
+              console.log(this.Contacts[this.x] + " entspricht " + this.ownname);
             }
-            this.i++;
           }
-          for (this.b = 0; this.b < this.Contacts.length; this.b++) {
-            this.items.push({ 'name': this.Contacts[this.b] });
+
+          for (this.b = 0; this.b < this.finalcontacts.length; this.b++) {
+            this.items.push({ 'name': this.finalcontacts[this.b] });
           }
         }
         else {
-          this.empty = "Hier sieht's noch leer aus :/";
+          this.empty = "It looks empty here :/";
         }
 
       }, (err) => {
@@ -72,9 +79,9 @@ export class ContactPage {
     }
   }
 
-    openNavDetailsPage(item) {
-        this.nav.push(Details, { item: item });
-    }
+  openNavDetailsPage(item) {
+    this.nav.push(Details, { item: item });
+  }
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
