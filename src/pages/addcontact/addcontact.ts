@@ -71,7 +71,7 @@ export class AddContact {
     this.ownname = this.storageH.getUsername();
 
     this.conv.push({"username": this.friend.toString() });
-    this.conv.push({ "username": this.ownname.toString() });
+    this.conv.push({"username": this.ownname.toString() });
 
     this.conv.sort(function (a, b) {
       var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();

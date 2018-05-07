@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ToastController, App } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
+import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 
 @Component({
     selector: 'page-details',
@@ -8,31 +9,49 @@ import { AuthService } from "../../providers/auth-service";
 })
 export class Details {
     item;
-    data: String = "";
     author: any = "";
     name: any;
+    Convarr = [];
+    conv: String;
     testname: any;
-    msgOut: any = { "message": "", "author": "" };
+    msgOut: any = { "conv": "", "message": "", "author": "" };
     resposeData: any;
 
-  constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
     this.item = params.data.item;
-    this.data = localStorage.getItem('userData');
-    this.author = this.getUsername(this.data);
   }
 
   msgSend() {
+    this.author = this.storageH.getUsername();
+
+    this.Convarr.push({ "username": this.author.toString() });
+    this.Convarr.push({ "username": this.item.name.toString()});
+    this.Convarr.sort(function (a, b) {
+      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
+    this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
+
+    this.msgOut.conv = this.conv;
+    this.msgOut.author = this.author;
+
+    console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
+
     if (this.msgOut) {
       //Api connections
       this.authService.postData(this.msgOut, "sendMessage").then((result) => {
         this.resposeData = result;
-        //this.presentToast("Message sending...");
         if (this.resposeData.msgOut) {
-          this.presentToast(this.resposeData);
-          //this.presentToast("Message send");
+          console.log(this.resposeData);
+
         }
         else {
-          //this.presentToast("Message not send");
+          console.log("Not found!");
         }
       }, (err) => {
         //Connection failed message
@@ -51,14 +70,6 @@ export class Details {
       duration: 2000
     });
     toast.present();
-  }
-
-  getUsername(data : String) {
-    this.name;
-    this.name = data.split(",");
-    this.name = this.name[1].split("\"");
-    this.testname = this.name[3].split(",");
-    return this.testname;
   }
 }
 
