@@ -54,6 +54,7 @@ export class ContactPage {
             if (this.Contacts[this.x] != this.ownname) {
               this.finalcontacts[this.i] = this.Contacts[this.x];
               this.i++;
+            }
           }
           this.i = 0;
           for (this.b = 0; this.b < this.finalcontacts.length; this.b++) {
@@ -61,7 +62,7 @@ export class ContactPage {
           }
         }
         else {
-          this.empty = "It looks empty here :/";
+          this.empty = "Hier sieht es noch leer aus :/";
         }
 
       }, (err) => {
