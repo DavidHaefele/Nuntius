@@ -4,7 +4,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Welcome } from '../pages/welcome/welcome';
 import { SplitPane } from '../providers/split-pane';
-import { AddContact } from '../pages/addcontact/addcontact';
 
 @Component({
   templateUrl: 'app.html'

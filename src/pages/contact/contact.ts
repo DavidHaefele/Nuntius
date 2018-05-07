@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, App, ToastController, MenuController } from 'ionic-angular';
+import { NavController, App, ToastController, MenuController } from 'ionic-angular';
 import { Details } from '../details/details';
 import { AuthService } from "../../providers/auth-service";
 import { SplitPane } from '../../providers/split-pane';
@@ -59,7 +59,7 @@ export class ContactPage {
           }
         }
         else {
-          this.empty = "It looks empty here :/";
+          this.empty = "Hier sieht's noch leer aus :/";
         }
 
       }, (err) => {
