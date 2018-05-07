@@ -3,6 +3,7 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { AuthService } from "../../providers/auth-service";
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { ContactPage } from '../contact/contact';
 
 /**
  * Generated class for the Login page.
@@ -84,20 +85,22 @@ export class AddContact {
 
     this.convstr = this.conv[0].username + ":" + this.conv[1].username;
     this.userDataC.conv = this.convstr;
-    this.presentToast(this.userDataC.conv);
+    //this.presentToast(this.userDataC.conv);
 
     if (this.userDataC.conv) {
+      //this.presentToast("Now adding: " + this.userDataC.conv);
       this.authService.postData(this.userDataC, "addConv").then((result) => {
         this.responseDataC = result;
         if (this.responseDataC.userDataC) {
           this.respC = JSON.stringify(this.responseDataC.userDataC);
-          this.presentToast(this.responseDataC.userDataC);
+          this.presentToast(item.name + " hinzugefügt");
         }
         else {
           this.presentToast("Could not add friend");
         }
       }, (err) => {
         //Connection failed message
+        this.presentToast(err);
       });
     }
     else {
