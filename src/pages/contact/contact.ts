@@ -34,7 +34,9 @@ export class ContactPage {
   }
 
   getContacts() {
-    this.items = [];
+    this.items = [{ 'name': "Halvar" }];
+    this.finalcontacts = [];
+    this.Contacts = [];
     this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
@@ -43,24 +45,17 @@ export class ContactPage {
         if (this.responseData.userData) {
           //this.presentToast(JSON.stringify(this.responseData.userData));
           this.resp = JSON.stringify(this.responseData.userData);
-          console.log(this.resp);
           this.Contacts = this.resp.split(":");
           this.Contacts[0] = this.Contacts[0].substring(1);
-          console.log(this.Contacts);
           this.Contacts.pop();
-          console.log(this.Contacts);
-
+          
           for (this.x = 0; this.x < this.Contacts.length; this.x++) {
 
             if (this.Contacts[this.x] != this.ownname) {
-              console.log(this.Contacts[this.x] + " entspricht nicht " + this.ownname);
               this.finalcontacts[this.i] = this.Contacts[this.x];
               this.i++;
-            } else {
-              console.log(this.Contacts[this.x] + " entspricht " + this.ownname);
-            }
           }
-
+          this.i = 0;
           for (this.b = 0; this.b < this.finalcontacts.length; this.b++) {
             this.items.push({ 'name': this.finalcontacts[this.b] });
           }
