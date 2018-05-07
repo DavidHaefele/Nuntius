@@ -22,6 +22,8 @@ export class MyApp {
 
   backToWelcome() {
     const root = this.app.getRootNav();
+    this.menu.enable(false);
+    this.splitPane.splitPaneState = false;
     root.popToRoot();
   }
 

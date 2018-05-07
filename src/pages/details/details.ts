@@ -14,6 +14,7 @@ export class Details {
     Convarr = [];
     conv: String;
     testname: any;
+    resp;
     msgOut: any = { "conv": "", "message": "", "author": "" };
     resposeData: any;
 
@@ -22,8 +23,8 @@ export class Details {
   }
 
   msgSend() {
+    this.Convarr = [];
     this.author = this.storageH.getUsername();
-
     this.Convarr.push({ "username": this.author.toString() });
     this.Convarr.push({ "username": this.item.name.toString()});
     this.Convarr.sort(function (a, b) {
@@ -34,6 +35,7 @@ export class Details {
         return 1;
       return 0; //default return value (no sorting)
     });
+    
 
     this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
 
@@ -46,8 +48,9 @@ export class Details {
       //Api connections
       this.authService.postData(this.msgOut, "sendMessage").then((result) => {
         this.resposeData = result;
-        if (this.resposeData.msgOut) {
-          console.log(this.resposeData);
+        if (this.resposeData) {
+          this.resp = JSON.stringify(this.resposeData.total);
+          console.log(this.resp);
 
         }
         else {
@@ -61,7 +64,6 @@ export class Details {
     else {
       this.presentToast("Messgage not send. Try again!");
     }
-    this.presentToast("Name: " + this.author);
   }
 
   presentToast(msg) {
