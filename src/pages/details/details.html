@@ -6,25 +6,40 @@
   </ion-navbar>
 </ion-header>
 
+<ion-content #content>
 
-<ion-content padding>
-
-    <ion-card class="absolute" color="primary">
+  <div class="chat">
+    <ion-card class="own" color="lightblue">
       <ion-card-content>
-        <p>{{ item.msgIn }}</p>
+        <p>{{ messages[0].message }}</p>
       </ion-card-content>
     </ion-card>
-    <ion-card class="absolute" color="primary">
+    <ion-card class="friend">
       <ion-card-content>
-        <p>{{ data }}</p>
+        <p>{{ messages[1].message }}</p>
       </ion-card-content>
     </ion-card>
-
-      <div class="absolute">
-        <ion-item>
-          <ion-label stacked>Nachricht</ion-label>
-          <ion-input type="text" [(ngModel)]="msgOut.message"></ion-input>
-        </ion-item>
-      </div>
-      <button ion-button round class="absolute" (click)="msgSend()"><small>Senden</small></button>
+    <ion-card class="own" color="lightblue">
+      <ion-card-content>
+        <p>{{ messages[2].message }}</p>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="friend">
+      <ion-card-content>
+        <p>{{ messages[3].message }}</p>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="own" color="lightblue">
+      <ion-card-content>
+        <p>{{ messages[4].message }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="input">
+    <ion-item>
+      <ion-label stacked>Nachricht</ion-label>
+      <ion-input type="text" [(ngModel)]="msgOut.message"></ion-input>
+    </ion-item>
+  </div>
+  <button ion-button round class="details" (click)="msgSend()"><small>Senden</small></button>
 </ion-content>
