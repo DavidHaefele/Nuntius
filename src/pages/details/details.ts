@@ -11,7 +11,7 @@ import { Content } from 'ionic-angular';
 export class Details {
     @ViewChild('content') content:any;
     item;
-    author: any = "";
+    author: String = "";
     name: any;
     t: number = 0;
     Convarr = [];
@@ -68,8 +68,7 @@ export class Details {
     this.getConv();
 
     this.msgOut.conv = this.conv;
-    this.msgOut.author = this.author;
-
+    this.msgOut.author = this.storageH.getUsername().toString();
     console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
 
     if (this.msgOut) {
@@ -78,8 +77,8 @@ export class Details {
         this.resposeData = result;
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.total);
+          this.msgOut.message = "";
           console.log(this.resp);
-
         }
         else {
           console.log("Not found!");
@@ -101,6 +100,7 @@ export class Details {
     });
     toast.present();
   }
+
   getConv() {
     this.Convarr = [];
     this.author = this.storageH.getUsername();
