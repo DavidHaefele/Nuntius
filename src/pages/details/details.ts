@@ -54,6 +54,7 @@ export class Details {
             this.rawMsg = this.resp.split(":");
             this.rawMsg[0] = this.rawMsg[0].substring(1);
             this.rawMsg.pop();
+
             console.log(this.rawMsg);
             for (this.d; this.d < this.rawMsg.length; this.d++) {
               if (this.d % 2 == 0) {
