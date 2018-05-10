@@ -38,27 +38,34 @@ export class Details {
   }
 
   displayMessages() {
-    for (this.t = 0; this.t < this.messages.length; this.t++) {
-
+    this.getConv();
+    if (this.conv) {
+      //Api connections
+      this.authService.postData(this.msgOut, "displayMessages").then((result) => {
+        this.resposeData = result;
+        if (this.resposeData) {
+          this.resp = JSON.stringify(this.resposeData);
+          console.log(this.resp);
+          for (this.t = 0; this.t < this.resp.disMes.length; this.t++) {
+            this.messages[this.t] = this.resp.disMes[this.t];
+            console.log(this.messages);
+          }
+        }
+        else {
+          console.log("Not found!");
+        }
+      }, (err) => {
+        //Connection failed message
+        this.presentToast("Connection failed. Error: " + err);
+      });
+    }
+    else {
+      this.presentToast("Could not load messages. Try again!");
     }
   }
 
   msgSend() {
-    this.Convarr = [];
-    this.author = this.storageH.getUsername();
-    this.Convarr.push({ "username": this.author.toString() });
-    this.Convarr.push({ "username": this.item.name.toString()});
-    this.Convarr.sort(function (a, b) {
-      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
-      if (nameA < nameB) //sort string ascending
-        return -1;
-      if (nameA > nameB)
-        return 1;
-      return 0; //default return value (no sorting)
-    });
-    
-
-    this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
+    this.getConv();
 
     this.msgOut.conv = this.conv;
     this.msgOut.author = this.author;
@@ -93,6 +100,23 @@ export class Details {
       duration: 2000
     });
     toast.present();
+  }
+  getConv() {
+    this.Convarr = [];
+    this.author = this.storageH.getUsername();
+    this.Convarr.push({ "username": this.author.toString() });
+    this.Convarr.push({ "username": this.item.name.toString() });
+    this.Convarr.sort(function (a, b) {
+      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
+
+    this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
   }
 }
 

@@ -7,10 +7,10 @@
     "\\src\\pages\\addcontact",
     "\\src\\pages\\contact",
     "\\src\\pages\\details",
-    "\\src\\pages\\home",
     "\\src\\providers",
-    "\\src\\providers\\storage-handler"
+    "\\src\\providers\\storage-handler",
+    "\\src\\theme"
   ],
-  "SelectedNode": "\\src\\pages\\addcontact\\addcontact.ts",
+  "SelectedNode": "\\src\\app\\app.module.ts",
   "PreviewInSolutionExplorer": false
 }
