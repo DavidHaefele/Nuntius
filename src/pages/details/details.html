@@ -7,31 +7,22 @@
 </ion-header>
 
 <ion-content #content>
-
-  <div class="chat">
-    <ion-card class="own" color="lightblue">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+                           pullingText="Ziehen um zu aktualisieren"
+                           refreshingSpinner="crescent"
+                           refreshingText="Aktualisiert...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div *ngFor="let message of messages; let i = index" class="chat">
+    <ion-card class="own" color="lightblue" *ngIf="messages[i].showown">
       <ion-card-content>
-        <p>{{ messages[0].message }}</p>
+        <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>
-    <ion-card class="friend">
+    <ion-card class="friend" color="white" *ngIf="!messages[i].showown">
       <ion-card-content>
-        <p>{{ messages[1].message }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="own" color="lightblue">
-      <ion-card-content>
-        <p>{{ messages[2].message }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="friend">
-      <ion-card-content>
-        <p>{{ messages[3].message }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="own" color="lightblue">
-      <ion-card-content>
-        <p>{{ messages[4].message }}</p>
+        <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>
   </div>

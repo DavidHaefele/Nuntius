@@ -9,22 +9,22 @@ import { Content } from 'ionic-angular';
     templateUrl: 'details.html',
 })
 export class Details {
-    @ViewChild('content') content:any;
-    item;
-    author: String = "";
-    name: any;
-    t: number = 0;
-    Convarr = [];
-    conv: String;
-    testname: any;
-    resp;
-    msgOut: any = { "conv": "", "message": "", "author": "" };
-    messages = [{ "number": "1", "message": "Du wolltest mich sehen?", "author": "Cookie" },
-              { "number": "2", "message": "Ja setz dich.", "author": "Bifius" },
-              { "number": "3", "message": "Danke, Kanzler", "author": "Cookie" },
-              { "number": "4", "message": "Did you ever hear the Tragedy of Darth Plagueis the Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful... the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. It's ironic he could save others from death, but not himself.", "author": "Bifius" },
-              { "number": "5", "message": "Ok ich untergebe mich euren Lehren, mein Meister!", "author": "Cookie" }];
-    resposeData: any;
+   @ViewChild('content') content:any;
+   item;
+   author: String = "";
+   name: any;
+   t: number = 0;
+   Convarr = [];
+   conv: String;
+   testname: any;
+   resp;
+   msgOut: any = { "conv": "", "message": "", "author": "" };
+   messages = [];
+   rawMsg = [];
+   resposeData: any;
+   d: number = 0;
+
+  
 
   scrollToBottom() {
     this.content.scrollToBottom();
@@ -32,7 +32,9 @@ export class Details {
 
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
     this.item = params.data.item;
+    this.displayMessages();
   }
+
   ionViewDidEnter() {
     this.content.scrollToBottom(300);
   }
@@ -41,15 +43,26 @@ export class Details {
     this.getConv();
     if (this.conv) {
       //Api connections
-      this.authService.postData(this.msgOut, "displayMessages").then((result) => {
+      this.authService.postData(this.conv, "displayMessages").then((result) => {
         this.resposeData = result;
         if (this.resposeData) {
-          this.resp = JSON.stringify(this.resposeData);
-          console.log(this.resp);
-          for (this.t = 0; this.t < this.resp.disMes.length; this.t++) {
-            this.messages[this.t] = this.resp.disMes[this.t];
-            console.log(this.messages);
+          this.resp = JSON.stringify(this.resposeData.disMes);
+          this.rawMsg = this.resp.split(":");
+          this.rawMsg[0] = this.rawMsg[0].substring(1);
+          this.rawMsg.pop();
+          console.log(this.rawMsg);
+
+          for (this.d; this.d < this.rawMsg.length; this.d++) {
+            if (this.d % 2 == 0) {
+              if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
+                this.messages.push({ "message": this.rawMsg[this.d], "showown": true });
+              }
+              else {
+                this.messages.push({ "message": this.rawMsg[this.d], "showown": false });
+              }
+            }
           }
+
         }
         else {
           console.log("Not found!");
@@ -117,6 +130,16 @@ export class Details {
 
 
     this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
+  }
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+    this.displayMessages();
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
   }
 }
 
