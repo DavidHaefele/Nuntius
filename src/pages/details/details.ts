@@ -24,7 +24,6 @@ export class Details {
    rawMsg = [];
    resposeData: any;
    d: number = 0;
-
   
 
   scrollToBottom() {
