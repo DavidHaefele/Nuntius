@@ -7,30 +7,28 @@
 </ion-header>
 
 <ion-content #content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown"
-                           pullingText="Ziehen um zu aktualisieren"
-                           refreshingSpinner="crescent"
-                           refreshingText="Aktualisiert...">
-    </ion-refresher-content>
-  </ion-refresher>
-  <div *ngFor="let message of messages; let i = index" class="chat">
-    <ion-card class="own" color="lightblue" *ngIf="messages[i].showown">
-      <ion-card-content>
-        <p>{{ messages[i].message }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="friend" color="white" *ngIf="!messages[i].showown">
-      <ion-card-content>
-        <p>{{ messages[i].message }}</p>
-      </ion-card-content>
-    </ion-card>
-  </div>
-  <div class="input">
-    <ion-item>
+
+  <div class="chat">
+      <div *ngFor="let message of messages; let i = index">
+        <ion-card class="own" color="lightblue" *ngIf="messages[i].showown">
+          <ion-card-content>
+            <p>{{ messages[i].message }}</p>
+          </ion-card-content>
+        </ion-card>
+        <ion-card class="friend" color="white" *ngIf="!messages[i].showown">
+          <ion-card-content>
+            <p>{{ messages[i].message }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+  <div class="input" style="background-color: white">
+    <ion-item class="inputfield">
       <ion-label stacked>Nachricht</ion-label>
       <ion-input id="inputField" type="text" [(ngModel)]="msgOut.message"></ion-input>
     </ion-item>
+    <button ion-button round class="details" (click)="msgSend()"><small>Senden</small></button>
+
   </div>
-  <button ion-button round class="details" (click)="msgSend()"><small>Senden</small></button>
 </ion-content>

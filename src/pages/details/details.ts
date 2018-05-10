@@ -3,6 +3,7 @@ import { NavController, NavParams, ToastController, App } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 import { Content } from 'ionic-angular';
+import { empty } from 'rxjs/Observer';
 
 @Component({
     selector: 'page-details',
@@ -17,7 +18,7 @@ export class Details {
    Convarr = [];
    conv: String;
    testname: any;
-   resp;
+   resp: any;
    msgOut: any = { "conv": "", "message": "", "author": "" };
    messages = [];
    rawMsg = [];
@@ -41,24 +42,27 @@ export class Details {
 
   displayMessages() {
     this.getConv();
+    this.messages = [];
+    this.resp = "";
     if (this.conv) {
       //Api connections
       this.authService.postData(this.conv, "displayMessages").then((result) => {
         this.resposeData = result;
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.disMes);
-          this.rawMsg = this.resp.split(":");
-          this.rawMsg[0] = this.rawMsg[0].substring(1);
-          this.rawMsg.pop();
-          console.log(this.rawMsg);
-
-          for (this.d; this.d < this.rawMsg.length; this.d++) {
-            if (this.d % 2 == 0) {
-              if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
-                this.messages.push({ "message": this.rawMsg[this.d], "showown": true });
-              }
-              else {
-                this.messages.push({ "message": this.rawMsg[this.d], "showown": false });
+          if (this.resp) {
+            this.rawMsg = this.resp.split(":");
+            this.rawMsg[0] = this.rawMsg[0].substring(1);
+            this.rawMsg.pop();
+            console.log(this.rawMsg);
+            for (this.d; this.d < this.rawMsg.length; this.d++) {
+              if (this.d % 2 == 0) {
+                if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
+                  this.messages.push({ "message": this.rawMsg[this.d], "showown": true });
+                }
+                else {
+                  this.messages.push({ "message": this.rawMsg[this.d], "showown": false });
+                }
               }
             }
           }

@@ -14,23 +14,32 @@ ion-card.own {
   width: 70%;
 }
 
-div.input {
-  position: fixed;
-  float: left;
+div.chat {
+  position: relative;
   width: 100%;
-  bottom: 40px;
+  padding-bottom: 17%;
 }
 
-div.chat {
-  padding-bottom: 60px;
-  
+div.input {
+  position: fixed;
+  width: 100%;
+  height: 10.5%;
+  bottom: 6%;
+}
+
+ion-item.inputfield {
+  float: left;
+  position: fixed;
+  width: 80%;
+  height: 10%;
+  bottom: 6.5%;
 }
 
 button.details {
   float: right;
   position: fixed;
-  right: 15px;
-  width: 50px;
-  height: 50px;
-  bottom: 45px;
+  right: 2.5%;
+  width: 3%;
+  height: 8%;
+  bottom: 6.5%;
 }
