@@ -51,11 +51,11 @@ export class Details {
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.disMes);
           if (this.resp) {
-            this.rawMsg = this.resp.split(":");
+            console.log(this.resp);
+            this.rawMsg = this.resp.split("̿̿̿’̵͇̿̿°");
             this.rawMsg[0] = this.rawMsg[0].substring(1);
             this.rawMsg.pop();
 
-            console.log(this.rawMsg);
             for (this.d; this.d < this.rawMsg.length; this.d++) {
               if (this.d % 2 == 0) {
                 if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
@@ -85,7 +85,7 @@ export class Details {
   msgSend() {
     this.getConv();
 
-    this.msgOut.conv = this.conv;
+    this.msgOut.conv = this.userData.conv;
     this.msgOut.author = this.storageH.getUsername().toString();
     console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
 
