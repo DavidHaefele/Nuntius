@@ -23,7 +23,8 @@ export class Details {
    messages = [];
    rawMsg = [];
    resposeData: any;
-   d: number = 0;
+  d: number = 0;
+  userData = { "conv": "" };
   
 
   scrollToBottom() {
@@ -41,11 +42,11 @@ export class Details {
 
   displayMessages() {
     this.getConv();
+    this.rawMsg = [];
     this.messages = [];
-    this.resp = "";
-    if (this.conv) {
+    if (this.userData.conv) {
       //Api connections
-      this.authService.postData(this.conv, "displayMessages").then((result) => {
+      this.authService.postData(this.userData, "displayMessages").then((result) => {
         this.resposeData = result;
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.disMes);
@@ -133,7 +134,7 @@ export class Details {
     });
 
 
-    this.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
+    this.userData.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
   }
 
   doRefresh(refresher) {
