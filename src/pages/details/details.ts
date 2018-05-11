@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ToastController, App } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
-import { Content } from 'ionic-angular';
-import { empty } from 'rxjs/Observer';
 
 @Component({
     selector: 'page-details',
@@ -15,16 +13,25 @@ export class Details {
    author: String = "";
    name: any;
    t: number = 0;
-   Convarr = [];
+  Convarr = [];
+  authorarr = [];
    conv: String;
    testname: any;
    resp: any;
    msgOut: any = { "conv": "", "message": "", "author": "" };
    messages = [];
-   rawMsg = [];
+   messagesRaw = [];
+   MsgData = { "conv": "", "nr": ""};
    resposeData: any;
-  d: number = 0;
-  userData = { "conv": "" };
+   d: number = 0;
+   i: number = 0;
+  x: number = 0;
+  f: number = 0;
+  p: number = 0;
+  rawrawmsg: String = "";
+   MsgNr: number;
+   authors = [];
+   userData = { "conv": "" };
   
 
   scrollToBottom() {
@@ -42,52 +49,65 @@ export class Details {
 
   displayMessages() {
     this.getConv();
-    this.rawMsg = [];
-    this.messages = [];
+    this.f = 0;
+
     if (this.userData.conv) {
       //Api connections
-      this.authService.postData(this.userData, "displayMessages").then((result) => {
+      console.log("In getMessageNumber: " +this.userData.conv);
+      this.authService.postData(this.userData, "getMessageNumber").then((result) => {
         this.resposeData = result;
         if (this.resposeData) {
-          this.resp = JSON.stringify(this.resposeData.disMes);
-          if (this.resp) {
-            this.rawMsg = this.resp.split(":");
-            this.rawMsg[0] = this.rawMsg[0].substring(1);
-            this.rawMsg.pop();
+          this.MsgNr = this.resposeData.disMes.total_messages;
+          if (this.MsgNr) {
 
-            console.log(this.rawMsg);
-            for (this.d; this.d < this.rawMsg.length; this.d++) {
-              if (this.d % 2 == 0) {
-                if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
-                  this.messages.push({ "message": this.rawMsg[this.d], "showown": true });
-                }
-                else {
-                  this.messages.push({ "message": this.rawMsg[this.d], "showown": false });
-                }
+            for (this.i = 0; this.i < this.MsgNr; this.i++) {
+              this.MsgData = { "conv": this.userData.conv, "nr": this.i.toString() };
+              if (this.MsgData) {
+                this.authService.postData(this.MsgData, "getMessage").then((result) => {
+                  this.resposeData = result;
+                  this.f++;
+                  if (this.resposeData) {
+                    this.resp = JSON.stringify(this.resposeData.disMes);
+                    if (this.resp) {
+                      this.rawrawmsg = this.resp.substring(1, this.resp.length - 1);
+                      this.messagesRaw.push(this.rawrawmsg);
+                      if (this.f == this.MsgNr - 1) {
+                        this.fillMessages();
+                      }
+                    }
+                    else {
+                      console.log("Not found!");
+                    }
+                  }
+                }, (err) => {
+                  //Connection failed message
+                  console.log("Connection failed. Error: " + err);
+                });
+              }
+              else {
+                console.log("Could not load messages. Try again!");
               }
             }
-          }
 
+          }
         }
         else {
           console.log("Not found!");
         }
       }, (err) => {
         //Connection failed message
-        this.presentToast("Connection failed. Error: " + err);
+        console.log("Connection failed. Error: " + err);
       });
     }
     else {
-      this.presentToast("Could not load messages. Try again!");
+      console.log("Could not load messages. Try again!");
     }
   }
 
   msgSend() {
     this.getConv();
-
-    this.msgOut.conv = this.conv;
+    this.msgOut.conv = this.userData.conv;
     this.msgOut.author = this.storageH.getUsername().toString();
-    console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
 
     if (this.msgOut) {
       //Api connections
@@ -96,7 +116,6 @@ export class Details {
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.total);
           this.msgOut.message = "";
-          console.log(this.resp);
         }
         else {
           console.log("Not found!");
@@ -145,6 +164,47 @@ export class Details {
       console.log('Async operation has ended');
       refresher.complete();
     }, 2000);
+  }
+
+  fillMessages() {
+    this.authorarr = [];
+    this.authors = [];
+    if (this.messagesRaw) {
+      this.authService.postData(this.userData, "getAuthors").then((result) => {
+        this.resposeData = result;
+        if (this.resposeData) {
+          this.resp = JSON.stringify(this.resposeData.disMes);
+          if (this.resp) {
+            this.authorarr = this.resp.split(":");
+            this.authorarr.pop();
+            this.authorarr[0] = this.authorarr[0].substring(1);
+
+            for (this.x = 0; this.x < this.authorarr.length; this.x++) {
+              this.authors.push(this.authorarr[this.x]);
+            }
+            
+            for (this.p = 0; this.p < this.messagesRaw.length; this.p++) {
+
+              if (this.authors[this.p] == this.storageH.getUsername()) {
+                this.messages.push({ "message": this.messagesRaw[this.p], "showown": true });
+              } else {
+                this.messages.push({ "message": this.messagesRaw[this.p], "showown": false });
+              }
+            }
+          }
+
+        }
+        else {
+          console.log("Not found!");
+        }
+      }, (err) => {
+        //Connection failed message
+        console.log("Connection failed. Error: " + err);
+      });
+    }
+    else {
+      console.log("Could not load messages. Try again!");
+    }
   }
 }
 
