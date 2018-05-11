@@ -8,9 +8,9 @@
     "\\src\\pages\\contact",
     "\\src\\pages\\details",
     "\\src\\providers",
-    "\\src\\providers\\storage-handler",
+    "\\src\\providers\\auth-service",
     "\\src\\theme"
   ],
-  "SelectedNode": "\\src\\pages\\details\\details.scss",
+  "SelectedNode": "\\src\\theme\\variables.scss",
   "PreviewInSolutionExplorer": false
 }

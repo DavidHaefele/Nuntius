@@ -6,7 +6,7 @@
     <ion-title>{{ownname}} - Kontakte</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content id="color1">
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown"
                            pullingText="Ziehen um zu aktualisieren"
@@ -15,14 +15,14 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="openNavDetailsPage(item)">
-      <ion-avatar item-start>
-        <img src="../assets/icon/chat.svg.png">
-      </ion-avatar>
+    <button ion-item id="color2" *ngFor="let item of items" (click)="openNavDetailsPage(item)">
+      <!--<ion-avatar item-start>
+    <img src="../assets/icon/chat.svg.png">
+  </ion-avatar>-->
       <h2><b>{{ item.name }}</b></h2>
       <p>{{item.msgIn}}</p>
     </button>
   </ion-list>
-  <h2><p style="text-align: center; color: grey;">{{ empty }}</p></h2>
-  <button ion-fab class="absolute" (click)="addContact()">+</button>
+  <h2><p style="text-align: center; color: white;">{{ empty }}</p></h2>
+  <button ion-fab id="color2" class="absolute" (click)="addContact()">+</button>
 </ion-content>

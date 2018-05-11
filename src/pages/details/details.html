@@ -6,7 +6,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content #content>
+<ion-content #content id="content">
 
   <div class="chat">
       <div *ngFor="let message of messages; let i = index">
@@ -15,7 +15,7 @@
             <p>{{ messages[i].message }}</p>
           </ion-card-content>
         </ion-card>
-        <ion-card class="friend" color="white" *ngIf="!messages[i].showown">
+        <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown">
           <ion-card-content>
             <p>{{ messages[i].message }}</p>
           </ion-card-content>
@@ -28,7 +28,7 @@
       <ion-label stacked>Nachricht</ion-label>
       <ion-input id="inputField" type="text" [(ngModel)]="msgOut.message"></ion-input>
     </ion-item>
-    <button ion-button round class="details" (click)="msgSend()"><small>Senden</small></button>
+    <button ion-button round class="details" (click)="msgSend()"><ion-icon name="send"></ion-icon></button>
 
   </div>
 </ion-content>
