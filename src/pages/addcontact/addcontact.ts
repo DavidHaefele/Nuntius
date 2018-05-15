@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { ContactPage } from '../contact/contact';
 
 /**
  * Generated class for the Login page.

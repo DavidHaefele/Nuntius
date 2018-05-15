@@ -29,20 +29,23 @@ export class ContactPage {
   Convarr = [];
   conv: String;
   responseDataC: any;
-  userDataC = { "conv": "" };
+  userDataC = {"conv": "" };
   respC: any;
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, public splitPane: SplitPane, public menu: MenuController) {
 
     this.menu.enable(true);
     this.splitPane.splitPaneState = true;
+  }
+
+  ionViewDidEnter() {
     this.getContacts();
   }
 
   getContacts() {
-    this.items = [];
     this.finalcontacts = [];
     this.Contacts = [];
+    this.items = [];
     this.userData.username = this.storageH.getUsername().toString();
     if (this.userData.username) {
       this.authService.postData(this.userData, "getContacts").then((result) => {
@@ -96,14 +99,16 @@ export class ContactPage {
     this.getConv(item);
     if (this.userDataC.conv) {
       //Api connections
+      console.log("The conv string is: |"+this.userDataC.conv+"| here.");
       this.authService.postData(this.userDataC, "deleteContact").then((result) => {
         this.responseDataC = result;
+        console.log(this.responseDataC.disMes);
         if (this.responseDataC) {
           this.respC = JSON.stringify(this.responseDataC.disMes);
           if (this.respC) {
-            console.log(this.respC);
+            console.log("Deleted " + this.respC);
+            this.getContacts();
           }
-
         }
         else {
           console.log("Not found!");
@@ -158,6 +163,6 @@ export class ContactPage {
     });
 
 
-    this.userDataC.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
+    this.userDataC.conv = (this.Convarr[0].username + ":" + this.Convarr[1].username).toString();
   }
 }

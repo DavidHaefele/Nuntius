@@ -32,6 +32,10 @@ export class Details {
     this.content.scrollToBottom();
   }
 
+  scrollHeight() {
+    this.content.scrollHeight();
+  }
+
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
     this.item = params.data.item;
     this.displayMessages();
@@ -57,7 +61,7 @@ export class Details {
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.disMes);
           if (this.resp) {
-            console.log(this.resp);
+            //console.log(this.resp);
             this.rawMsg = this.resp.split("̿̿̿’̵͇̿̿°");
             this.rawMsg[0] = this.rawMsg[0].substring(1);
             this.rawMsg.pop();
@@ -142,16 +146,6 @@ export class Details {
 
 
     this.userData.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
-  }
-
-  doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-    this.displayMessages();
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
   }
 }
 

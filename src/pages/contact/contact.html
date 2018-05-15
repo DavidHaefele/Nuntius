@@ -7,13 +7,6 @@
   </ion-navbar>
 </ion-header>
 <ion-content id="color1">
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown"
-                           pullingText="Ziehen um zu aktualisieren"
-                           refreshingSpinner="crescent"
-                           refreshingText="Aktualisiert...">
-    </ion-refresher-content>
-  </ion-refresher>
   <ion-list>
     <ion-item-sliding id="color1" *ngFor="let item of items">
     <button ion-item id="color2" (click)="openNavDetailsPage(item)">
