@@ -11,6 +11,7 @@ import { AddContact } from '../addcontact/addcontact';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
+  item;
   responseData: any;
   userData = { "username": "" };
   items = [];
@@ -25,6 +26,11 @@ export class ContactPage {
   friends = [];
   friend: any;
   canFindContacts: Boolean = true;
+  Convarr = [];
+  conv: String;
+  responseDataC: any;
+  userDataC = { "conv": "" };
+  respC: any;
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, public splitPane: SplitPane, public menu: MenuController) {
 
@@ -85,6 +91,33 @@ export class ContactPage {
     }
   }
 
+
+  deleteContact(item: any) {
+    this.getConv({item: item});
+    if (this.userDataC.conv) {
+      //Api connections
+      this.authService.postData(this.userDataC, "deleteContact").then((result) => {
+        this.responseDataC = result;
+        if (this.responseDataC) {
+          this.respC = JSON.stringify(this.responseDataC.disMes);
+          if (this.respC) {
+            console.log(this.respC);
+          }
+
+        }
+        else {
+          console.log("Not found!");
+        }
+      }, (err) => {
+        //Connection failed message
+        this.presentToast("Connection failed. Error: " + err);
+      });
+    }
+    else {
+      this.presentToast("Could not load messages. Try again!");
+    }
+  }
+
   openNavDetailsPage(item) {
     this.nav.push(Details, { item: item });
   }
@@ -109,5 +142,22 @@ export class ContactPage {
 
   addContact() {
     this.nav.push(AddContact);
+  }
+
+  getConv(item: any) {
+    this.Convarr = [];
+    this.Convarr.push({ "username": this.ownname });
+    this.Convarr.push({ "username": this.item.name.toString() });
+    this.Convarr.sort(function (a, b) {
+      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+        return -1;
+      if (nameA > nameB)
+        return 1;
+      return 0; //default return value (no sorting)
+    });
+
+
+    this.userDataC.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
   }
 }

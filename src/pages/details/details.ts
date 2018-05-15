@@ -72,7 +72,6 @@ export class Details {
                 }
               }
             }
-            this.scrollToBottom();
           }
 
         }
