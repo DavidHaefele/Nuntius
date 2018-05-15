@@ -36,7 +36,10 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
   ],
   imports: [
     BrowserModule, HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      tabsPlacement: 'bottom',
+      tabsHighlight: 'true',
+      tabsHideOnSubPages: 'true'})
   ],
   bootstrap: [IonicApp],
   entryComponents: [

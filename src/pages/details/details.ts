@@ -50,6 +50,8 @@ export class Details {
   displayMessages() {
     this.getConv();
     this.f = 0;
+    this.resp = "";
+
 
     if (this.userData.conv) {
       //Api connections
@@ -76,7 +78,7 @@ export class Details {
                       }
                     }
                     else {
-                      console.log("Not found!");
+                      console.log("Not1 found!");
                     }
                   }
                 }, (err) => {
@@ -118,7 +120,7 @@ export class Details {
           this.msgOut.message = "";
         }
         else {
-          console.log("Not found!");
+          console.log("Not2 found!");
         }
       }, (err) => {
         //Connection failed message
@@ -195,7 +197,7 @@ export class Details {
 
         }
         else {
-          console.log("Not found!");
+          console.log("Not3 found!");
         }
       }, (err) => {
         //Connection failed message
