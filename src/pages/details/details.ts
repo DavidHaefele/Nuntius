@@ -25,6 +25,7 @@ export class Details {
    resposeData: any;
   d: number = 0;
   userData = { "conv": "" };
+  id: any = 1;
   
 
   scrollToBottom() {
@@ -34,16 +35,21 @@ export class Details {
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
     this.item = params.data.item;
     this.displayMessages();
+    this.id = setInterval(() => {
+      this.displayMessages();
+    }, 500);
   }
 
   ionViewDidEnter() {
-    this.content.scrollToBottom(300);
+    this.content.scrollToBottom();
+  }
+
+  ionViewWillLeave() {
+    clearInterval(this.id);
   }
 
   displayMessages() {
     this.getConv();
-    this.rawMsg = [];
-    this.messages = [];
     if (this.userData.conv) {
       //Api connections
       this.authService.postData(this.userData, "displayMessages").then((result) => {
@@ -66,6 +72,7 @@ export class Details {
                 }
               }
             }
+            this.scrollToBottom();
           }
 
         }
@@ -97,6 +104,7 @@ export class Details {
           this.resp = JSON.stringify(this.resposeData.total);
           this.msgOut.message = "";
           console.log(this.resp);
+          this.scrollToBottom();
         }
         else {
           console.log("Not found!");
