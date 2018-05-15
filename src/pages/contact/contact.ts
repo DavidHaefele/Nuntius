@@ -92,8 +92,8 @@ export class ContactPage {
   }
 
 
-  deleteContact(item: any) {
-    this.getConv({item: item});
+  deleteContact(item) {
+    this.getConv(item);
     if (this.userDataC.conv) {
       //Api connections
       this.authService.postData(this.userDataC, "deleteContact").then((result) => {
@@ -144,10 +144,10 @@ export class ContactPage {
     this.nav.push(AddContact);
   }
 
-  getConv(item: any) {
+  getConv(item) {
     this.Convarr = [];
-    this.Convarr.push({ "username": this.ownname });
-    this.Convarr.push({ "username": this.item.name.toString() });
+    this.Convarr.push({ "username": this.ownname.toString() });
+    this.Convarr.push({ "username": item.name.toString() });
     this.Convarr.sort(function (a, b) {
       var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
       if (nameA < nameB) //sort string ascending
