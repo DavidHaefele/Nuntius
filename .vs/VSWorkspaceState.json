@@ -11,6 +11,6 @@
     "\\src\\providers\\auth-service",
     "\\src\\theme"
   ],
-  "SelectedNode": "\\src\\theme\\variables.scss",
+  "SelectedNode": "\\src\\pages\\details\\details.ts",
   "PreviewInSolutionExplorer": false
 }
