@@ -20,6 +20,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { StorageHandlerProvider } from '../providers/storage-handler/storage-handler';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 
 @NgModule({
@@ -55,7 +56,7 @@ import { StorageHandlerProvider } from '../providers/storage-handler/storage-han
   ],
   providers: [
     StatusBar,
-    SplashScreen, AuthService, SplitPane,
+    SplashScreen, AuthService, SplitPane, LocalNotifications,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthServiceProvider,
     StorageHandlerProvider

@@ -4,6 +4,7 @@ import { AuthService } from "../../providers/auth-service";
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 import { Content } from 'ionic-angular';
 import { empty } from 'rxjs/Observer';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 @Component({
     selector: 'page-details',
@@ -26,6 +27,10 @@ export class Details {
   d: number = 0;
   userData = { "conv": "" };
   id: any = 1;
+  oldId: any;
+  userDataC = { "conv": "", "oldId": "" };
+  change: any;
+  msgSent: Boolean;
   
 
   scrollToBottom() {
@@ -36,7 +41,7 @@ export class Details {
     this.content.scrollHeight();
   }
 
-  constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
+  constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider, public localNotifications: LocalNotifications) {
     this.item = params.data.item;
     this.displayMessages();
     this.id = setInterval(() => {
@@ -60,6 +65,10 @@ export class Details {
         this.resposeData = result;
         if (this.resposeData) {
           this.resp = JSON.stringify(this.resposeData.disMes);
+          this.oldId = JSON.stringify(this.resposeData.oldId);
+          console.log(this.oldId);
+          this.deltaMsg();
+
           if (this.resp) {
             //console.log(this.resp);
             this.rawMsg = this.resp.split("̿̿̿’̵͇̿̿°");
@@ -93,6 +102,7 @@ export class Details {
   }
 
   msgSend() {
+    this.msgSent = true;
     this.getConv();
 
     this.msgOut.conv = this.userData.conv;
@@ -122,6 +132,46 @@ export class Details {
     }
   }
 
+
+  deltaMsg() {
+    if (this.msgSent) {
+      this.msgSent = false;
+    }
+
+    else {
+      this.getConv();
+
+      this.userDataC.conv = this.userData.conv;
+      this.userDataC.oldId = this.oldId;
+
+
+      if (this.userDataC) {
+        //Api connections
+        this.authService.postData(this.userDataC, "deltaMsg").then((result) => {
+          this.resposeData = result;
+          if (this.resposeData) {
+            this.change = JSON.stringify(this.resposeData.change);
+            this.userDataC.oldId = "";
+            console.log(this.change);
+
+            if (this.change == '"1"') {
+              this.notify();
+            }
+          }
+          else {
+            console.log("Not found!");
+          }
+        }, (err) => {
+          //Connection failed message
+          this.presentToast("Connection failed. Error: " + err);
+        });
+      }
+      else {
+        this.presentToast("Messgage not send. Try again!");
+      }
+    }
+  }
+
   presentToast(msg) {
     let toast = this.toastCtrl.create({
       message: msg,
@@ -147,6 +197,14 @@ export class Details {
 
     this.userData.conv = this.Convarr[0].username + ":" + this.Convarr[1].username;
   }
+
+  notify() {
+    this.localNotifications.schedule({
+      title: 'Nuntius',
+      text: 'Du hast neue Nachrichten!',
+      led: '0000FF',
+    });
+   }
 }
 
 

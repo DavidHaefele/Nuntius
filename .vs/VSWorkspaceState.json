@@ -11,6 +11,6 @@
     "\\src\\providers\\auth-service",
     "\\src\\theme"
   ],
-  "SelectedNode": "\\src\\pages\\addcontact\\addcontact.html",
+  "SelectedNode": "\\src\\app\\app.module.ts",
   "PreviewInSolutionExplorer": false
 }
