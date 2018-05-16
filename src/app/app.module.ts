@@ -2,45 +2,63 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { AuthService } from '../providers/auth-service';
+import { SplitPane } from '../providers/split-pane';
 
+import { HttpModule } from "@angular/http";
+import { Welcome } from '../pages/welcome/welcome';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
-import { NavigationDetailsPage } from '../pages/details/details';
-import { HomePage } from '../pages/home/home';
+import { Details } from '../pages/details/details';
+import { Signup } from '../pages/signup/signup';
+import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
+import { AddContact } from '../pages/addcontact/addcontact';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { SQLite} from '@ionic-native/sqlite';
+
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { StorageHandlerProvider } from '../providers/storage-handler/storage-handler';
 
 
 @NgModule({
   declarations: [
     MyApp,
+    Welcome,
     AboutPage,
     ContactPage,
-    NavigationDetailsPage,
-    HomePage,
-    TabsPage
+    Details,
+    Signup,
+    Login,
+    AddContact,
+    TabsPage,
   ],
   imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp)
+    BrowserModule, HttpModule,
+    IonicModule.forRoot(MyApp, {
+      tabsPlacement: 'bottom',
+      tabsHighlight: 'true',
+      tabsHideOnSubPages: 'true'})
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    Welcome,
     AboutPage,
     ContactPage,
-    NavigationDetailsPage,
-    HomePage,
+    Details,
+    Signup,
+    Login,
+    AddContact,
     TabsPage
   ],
   providers: [
     StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SQLite
+    SplashScreen, AuthService, SplitPane,
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    AuthServiceProvider,
+    StorageHandlerProvider
   ]
 })
 export class AppModule {}

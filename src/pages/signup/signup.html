@@ -1,0 +1,18 @@
+<ion-content padding>
+  <ion-list>
+
+    <ion-item>
+      <ion-label fixed>Username</ion-label>
+      <ion-input type="text" [(ngModel)]="userData.username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Passwort</ion-label>
+      <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
+    </ion-item>
+
+    <button ion-button block color="primary" (click)="signup()">Registrieren</button>
+
+    <a href="#" (click)="login()">Anmelden</a>
+  </ion-list>
+</ion-content>

@@ -1,20 +1,48 @@
-ion-card.absolute {
-  position: absolute;
-  left: 15px;
+page-details {
+  #content {
+    background: color($colors, energy);
+  }
+}
+
+ion-card.friend {
+  position: relative;
+  color: green;
+  overflow: auto;
+  right: 1px;
   width: 70%;
 }
 
-div.absolute {
-  position: absolute;
+ion-card.own {
+  position: relative;
+  overflow: auto;
+  color: white;
+  left: 25%;
   width: 70%;
-  bottom: 15px;
-  left: 15px;
 }
 
-button.absolute {
-  position: absolute;
-  right: 15px;
-  width: 50px;
-  height: 50px;
-  bottom: 15px;
+div.chat {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100px;
+}
+
+div.input {
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  bottom: 0%;
+}
+
+ion-item.inputfield {
+  position: fixed;
+  width: 80%;
+  padding-top: 0%;
+  bottom: 3%;
+}
+
+button.details {
+  float: right;
+  position: fixed;
+  right: 3%;
+  bottom: 3%;
 }

@@ -4,8 +4,13 @@
     "\\src",
     "\\src\\app",
     "\\src\\pages",
-    "\\src\\pages\\home"
+    "\\src\\pages\\addcontact",
+    "\\src\\pages\\contact",
+    "\\src\\pages\\details",
+    "\\src\\providers",
+    "\\src\\providers\\auth-service",
+    "\\src\\theme"
   ],
-  "SelectedNode": "\\src\\app\\app.module.ts",
+  "SelectedNode": "\\src\\pages\\addcontact\\addcontact.html",
   "PreviewInSolutionExplorer": false
 }

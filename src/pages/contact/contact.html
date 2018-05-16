@@ -1,17 +1,26 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Kontakte</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ownname}} - Kontakte</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content id="color1">
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="openNavDetailsPage(item)">
-      <ion-avatar item-start>
-        <img src="{{item.img}}">
-      </ion-avatar>
-        <h2>{{ item.name }}</h2>
-        <h4>{{item.description}}</h4>
-        <p>{{item.msgIn}}</p>
-</button>
+    <ion-item-sliding id="color1" *ngFor="let item of items">
+    <button ion-item id="color2" (click)="openNavDetailsPage(item)">
+      <!--<ion-avatar item-start>
+      <img src="../assets/icon/chat.svg.png">
+    </ion-avatar>-->
+      <h2><b>{{ item.name }}</b></h2>
+      <p>{{item.msgIn}}</p>
+    </button>
+    <ion-item-options>
+      <button style="background-color:red; color:white" (click)="deleteContact(item)"><ion-icon name="trash"></ion-icon> Entfernen</button>
+    </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
+  <h2><p style="text-align: center; color: white;">{{ empty }}</p></h2>
+  <button ion-fab id="color2" class="absolute" (click)="addContact()">+</button>
 </ion-content>
