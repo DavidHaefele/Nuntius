@@ -78,11 +78,7 @@ export class ContactPage {
           for (this.b = 0; this.b < this.finalcontacts.length; this.b++) {
             this.items.push({ 'name': this.finalcontacts[this.b] });
           }
-
           this.lastMessages(this.items);
-          setTimeout(() => {
-            console.log('lastMessages finished');
-          }, 2000);
 
         } else {
           this.canFindContacts = false;
@@ -152,7 +148,7 @@ export class ContactPage {
           if (this.respD) {
             this.respD = this.respD.replace('"', '');
             this.respD = this.respD.replace('"', '');
-            console.log(this.respD);
+
             this.lastMsgArr.push(this.respD);
             console.log("lastMsgArr = " + this.lastMsgArr);
           }

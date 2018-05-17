@@ -68,10 +68,6 @@ export class Details {
           this.oldId = JSON.stringify(this.resposeData.oldId);
           console.log(this.oldId);
 
-          if (this.oldId != null) {
-            this.deltaMsg();
-          }
-
           if (this.resp) {
             //console.log(this.resp);
             this.rawMsg = this.resp.split("̿̿̿’̵͇̿̿°");
@@ -88,8 +84,8 @@ export class Details {
                 }
               }
             }
+            this.deltaMsg();
           }
-
         }
         else {
           console.log("Not found!");
