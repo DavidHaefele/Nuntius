@@ -67,7 +67,10 @@ export class Details {
           this.resp = JSON.stringify(this.resposeData.disMes);
           this.oldId = JSON.stringify(this.resposeData.oldId);
           console.log(this.oldId);
-          this.deltaMsg();
+
+          if (this.oldId != null) {
+            this.deltaMsg();
+          }
 
           if (this.resp) {
             //console.log(this.resp);
@@ -155,8 +158,9 @@ export class Details {
             console.log(this.change);
 
             if (this.change == '"1"') {
-              this.notify();
+              this.presentToast("Neue Nachricht!");
             }
+
           }
           else {
             console.log("Not found!");

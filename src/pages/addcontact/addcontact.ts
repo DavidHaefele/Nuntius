@@ -94,6 +94,7 @@ export class AddContact {
           this.respC = JSON.stringify(this.responseDataC.userDataC);
           this.presentToast(item.name + " hinzugefügt");
           this.navCtrl.pop();
+          this.items = [];
 
         }
         else {

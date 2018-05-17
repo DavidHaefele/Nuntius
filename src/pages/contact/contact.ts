@@ -31,6 +31,9 @@ export class ContactPage {
   responseDataC: any;
   userDataC = {"conv": "" };
   respC: any;
+  respD: any;
+  c: number;
+  lastMsgArr = [];
 
   constructor(public nav: NavController, public app: App, public authService: AuthService, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, public splitPane: SplitPane, public menu: MenuController) {
 
@@ -75,6 +78,12 @@ export class ContactPage {
           for (this.b = 0; this.b < this.finalcontacts.length; this.b++) {
             this.items.push({ 'name': this.finalcontacts[this.b] });
           }
+
+          this.lastMessages(this.items);
+          setTimeout(() => {
+            console.log('lastMessages finished');
+          }, 2000);
+
         } else {
           this.canFindContacts = false;
           if (!this.canFindContacts) {
@@ -108,6 +117,44 @@ export class ContactPage {
           if (this.respC) {
             console.log("Deleted " + this.respC);
             this.getContacts();
+          }
+        }
+        else {
+          console.log("Not found!");
+        }
+      }, (err) => {
+        //Connection failed message
+        this.presentToast("Connection failed. Error: " + err);
+      });
+    }
+    else {
+      this.presentToast("Could not load messages. Try again!");
+    }
+  }
+
+  lastMessages(items) {
+    this.lastMsgArr = [];
+    for (this.c = 0; this.c < items.length; this.c++) {
+      this.lastMsg(items[this.c]);
+    }
+  }
+
+
+  lastMsg(item) {
+    this.getConv(item);
+    if (this.userDataC.conv) {
+
+      this.authService.postData(this.userDataC, "lastMsg").then((result) => {
+        this.responseDataC = result;
+        console.log(this.responseDataC.disMes);
+        if (this.responseDataC) {
+          this.respD = JSON.stringify(this.responseDataC.disMes.message);
+          if (this.respD) {
+            this.respD = this.respD.replace('"', '');
+            this.respD = this.respD.replace('"', '');
+            console.log(this.respD);
+            this.lastMsgArr.push(this.respD);
+            console.log("lastMsgArr = " + this.lastMsgArr);
           }
         }
         else {
