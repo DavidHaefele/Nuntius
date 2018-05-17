@@ -154,7 +154,7 @@ export class Details {
             console.log(this.change);
 
             if (this.change == '"1"') {
-              this.presentToast("Neue Nachricht!");
+              this.notify();
             }
 
           }
