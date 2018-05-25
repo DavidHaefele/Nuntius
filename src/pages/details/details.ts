@@ -70,13 +70,12 @@ export class Details {
   ionViewDidEnter() {
     this.content.scrollToBottom();
     this.contentTop();
-    this.scrollPos0 = this.dimensions.scrollHeight - this.dimensions.scrollTop + 600;
+    this.scrollPos0 = this.dimensions.scrollHeight - this.dimensions.scrollTop + 1000;
+
     this.id2 = setInterval(() => {
       this.contentTop();
       this.scrollPos = this.dimensions.scrollHeight - this.dimensions.scrollTop;
       this.contentHeight();
-      console.log("Max height of the scroll area = " + this.ContentHeight);
-      console.log(this.scrollPos);
     }, 500);
   }
 
