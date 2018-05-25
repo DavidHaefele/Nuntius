@@ -28,8 +28,9 @@ export class ContactPage {
   canFindContacts: Boolean = true;
   Convarr = [];
   conv: String;
+  itemNr: number;
   responseDataC: any;
-  userDataC = {"conv": "" };
+  userDataC = {"conv": "", "nr" : "" };
   respC: any;
   respD: any;
   c: number;
@@ -130,26 +131,30 @@ export class ContactPage {
 
   lastMessages(items) {
     this.lastMsgArr = [];
+    this.itemNr = 0;
     for (this.c = 0; this.c < items.length; this.c++) {
-      this.lastMsg(items[this.c]);
+      this.lastMsg(items[this.c], this.itemNr);
+      this.itemNr++;
     }
   }
 
 
-  lastMsg(item) {
+  lastMsg(item, itemNr) {
     this.getConv(item);
+    this.userDataC.nr = this.itemNr.toString();
     if (this.userDataC.conv) {
-
+      console.log("Looking for last Message of " + this.userDataC.conv);
       this.authService.postData(this.userDataC, "lastMsg").then((result) => {
         this.responseDataC = result;
         console.log(this.responseDataC.disMes);
         if (this.responseDataC) {
           this.respD = JSON.stringify(this.responseDataC.disMes.message);
+          console.log("I found '" + this.respD+"'.");
           if (this.respD) {
             this.respD = this.respD.replace('"', '');
             this.respD = this.respD.replace('"', '');
 
-            this.lastMsgArr.push(this.respD);
+            this.lastMsgArr[this.responseDataC.nr] = this.respD;
             console.log("lastMsgArr = " + this.lastMsgArr);
           }
         }

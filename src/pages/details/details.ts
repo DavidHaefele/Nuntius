@@ -11,7 +11,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     templateUrl: 'details.html',
 })
 export class Details {
-   @ViewChild('content') content:any;
+  @ViewChild('content') content: any;
+  @ViewChild('scroll') scroll: any;
    item;
    author: String = "";
    name: any;
@@ -22,23 +23,39 @@ export class Details {
    resp: any;
    msgOut: any = { "conv": "", "message": "", "author": "" };
    messages = [];
-   rawMsg = [];
+  rawMsg = [];
+  dimensions: any;
    resposeData: any;
   d: number = 0;
   userData = { "conv": "" };
   id: any = 1;
+  id2: any = 1;
   oldId: any;
   userDataC = { "conv": "", "oldId": "" };
   change: any;
   msgSent: Boolean;
-  
+  scrollPos: number;
+  scrollPos0: number;
+  ContentHeight: number;
 
   scrollToBottom() {
     this.content.scrollToBottom();
   }
 
-  scrollHeight() {
-    this.content.scrollHeight();
+  scrollTo(x: number,
+    y: number,
+    duration: number): void {
+    this.content.scrollTo(x, y, duration);
+  }
+
+  contentHeight() {
+    this.dimensions = this.content.getContentDimensions();
+    this.ContentHeight = this.dimensions.scrollHeight;
+    console.log("CONTENT HEIGHT: " + this.dimensions.scrollHeight);
+  }
+
+  contentTop() {
+    this.dimensions = this.content.getContentDimensions() ;
   }
 
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider, public localNotifications: LocalNotifications) {
@@ -49,8 +66,18 @@ export class Details {
     }, 500);
   }
 
+
   ionViewDidEnter() {
     this.content.scrollToBottom();
+    this.contentTop();
+    this.scrollPos0 = this.dimensions.scrollHeight - this.dimensions.scrollTop + 600;
+    this.id2 = setInterval(() => {
+      this.contentTop();
+      this.scrollPos = this.dimensions.scrollHeight - this.dimensions.scrollTop;
+      this.contentHeight();
+      console.log("Max height of the scroll area = " + this.ContentHeight);
+      console.log(this.scrollPos);
+    }, 500);
   }
 
   ionViewWillLeave() {
@@ -155,8 +182,11 @@ export class Details {
 
             if (this.change == '"1"') {
               this.notify();
-            }
 
+              this.contentHeight();
+              console.log("NOW HERE!");
+              this.scrollTo(0, this.ContentHeight, 1);
+            }
           }
           else {
             console.log("Not found!");
