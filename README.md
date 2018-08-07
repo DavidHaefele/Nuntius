@@ -1,4 +1,4 @@
 # Nuntius
-A next generation messenger.
+This is simple account-based messenger hybrid app for Android, IOS and Windows Phone.
 
-This is a simple Ionic project, where we try to create a messenger app connected to a mysql server.
+The app is built with Ionic 3 and is intended to connect to a MySQL server via PHP on an Apache2 webserver.
