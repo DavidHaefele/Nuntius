@@ -5,4 +5,6 @@
 4. mp3 versenden
 
 //EXTRA NOTE 18.08.2018 - hk
-Hab meine ngrok URL mit deiner ersetzt aber deine URL "gespeichert" in einem Kommentar.
+1. Hab meine ngrok URL mit deiner ersetzt aber deine URL "gespeichert" in einem Kommentar.
+
+2. Führe bitte auch den "git rm .vs -r --cached" Befehl aus, um den unnötigen ".vs" Ordner nicht immer mit zu pushen
