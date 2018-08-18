@@ -21,9 +21,9 @@ button.absolute {
   height: 50px;
   bottom: 15px;
 }
-button.floating {
+button.fixedButton {
     float: right;
     position: fixed;
-    right: 3%;
-    bottom: 3%;
+    right: 7%;
+    bottom: 10%;
 }
