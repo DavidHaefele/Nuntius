@@ -2,8 +2,18 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+//SERVER URL
+
+//localhost
 //let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
-let apiUrl = 'http://5d187040.ngrok.io/PHP-Slim-Restful/api/';
+
+//HK-URL
+let apiUrl = 'http://f75b2b9d.ngrok.io/PHP-Slim-Restful/api/';
+
+//DH-URL
+//let apiUrl = 'http://5d187040.ngrok.io/PHP-Slim-Restful/api/';
+
+
 /*
   Generated class for the AuthService provider.
 

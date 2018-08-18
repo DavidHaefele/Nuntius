@@ -26,7 +26,6 @@ export class MyApp {
     this.menu.enable(false);
     this.splitPane.splitPaneState = false;
     this.nav.setRoot(this.rootPage);
-    //root.popToRoot();
   }
 
   logout() {

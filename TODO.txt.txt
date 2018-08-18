@@ -1,0 +1,8 @@
+//TODO 18.08.2018 - hk
+1. Im Registrieren Screen ein Anmelde Button hinzufügen, als Option.
+2. Anmelde Button im Registriere Screen überarbeiten.
+3. Add Contacts Button floatend machen
+
+
+//EXTRA NOTE 18.08.2018 - hk
+Hab meine ngrok URL mit deiner ersetzt aber deine "gespeichert" in einem Kommentar.
