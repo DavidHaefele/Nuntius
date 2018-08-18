@@ -46,9 +46,7 @@ export class Signup {
   }
 
   login() {
-    this
-      .navCtrl
-      .push(Login);
+    this.navCtrl.push(Login);
   }
 
   presentToast(msg) {

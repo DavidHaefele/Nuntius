@@ -7,5 +7,19 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Hier gibt's nichts zu sehen...</h3>
+  <ion-list name="Settings">
+    <ion-list-header>
+      Einstellungen
+    </ion-list-header>
+    <button ion-item id="theme" (click)="themeTab()">
+      <ion-icon name="brush" item-start color="primary"></ion-icon>
+      <ion-label>Design</ion-label>
+      <ion-note item-end>Blue</ion-note>
+    </button>
+    <button ion-item id="check" (click)="checkCurrentDesign()">
+      <ion-icon name="brush" item-start color="primary"></ion-icon>
+      <ion-label>check</ion-label>
+      <ion-note item-end>check</ion-note>
+    </button>
+  </ion-list>
 </ion-content>
