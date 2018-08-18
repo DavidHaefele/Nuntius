@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 //let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
 
 //HK-URL
-let apiUrl = 'http://f75b2b9d.ngrok.io/PHP-Slim-Restful/api/';
+let apiUrl = 'http://074e541f.ngrok.io/PHP-Slim-Restful/api/';
 
 //DH-URL
 //let apiUrl = 'http://5d187040.ngrok.io/PHP-Slim-Restful/api/';

@@ -1,7 +1,8 @@
-﻿//TODO 18.08.2018 - hk
-1. Gruppenchat
-2. Bild versenden
-3. mp3 versenden
+//TODO 18.08.2018 - hk
+1. Chatverlauf wird nicht angezeigt
+2. Gruppenchat
+3. Bild versenden
+4. mp3 versenden
 
 //EXTRA NOTE 18.08.2018 - hk
 Hab meine ngrok URL mit deiner ersetzt aber deine URL "gespeichert" in einem Kommentar.
