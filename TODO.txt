@@ -1,5 +1,5 @@
 //TODO 18.08.2018 - hk
-1. Chatverlauf wird nicht angezeigt
+1. Mit user ID statt user Name arbeiten
 2. Gruppenchat
 3. Bild versenden
 4. mp3 versenden
@@ -7,4 +7,4 @@
 //EXTRA NOTE 18.08.2018 - hk
 1. Hab meine ngrok URL mit deiner ersetzt aber deine URL "gespeichert" in einem Kommentar.
 
-2. Führe bitte auch den "git rm .vs -r --cached" Befehl aus, um den unnötigen ".vs" Ordner nicht immer mit zu pushen
+2. FÃ¼hre bitte auch den "git rm .vs -r --cached" Befehl aus, um den unnÃ¶tigen ".vs" Ordner nicht immer mit zu pushen
