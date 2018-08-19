@@ -4,13 +4,13 @@
     "\\src",
     "\\src\\app",
     "\\src\\pages",
-    "\\src\\pages\\addcontact",
+    "\\src\\pages\\about",
     "\\src\\pages\\contact",
     "\\src\\pages\\details",
-    "\\src\\providers",
-    "\\src\\providers\\auth-service",
-    "\\src\\theme"
+    "\\src\\pages\\login",
+    "\\src\\pages\\tabs",
+    "\\src\\pages\\welcome"
   ],
-  "SelectedNode": "\\src\\pages\\contact\\contact.ts",
+  "SelectedNode": "\\src\\pages\\login\\login.ts",
   "PreviewInSolutionExplorer": false
 }

@@ -51,7 +51,7 @@ export class Details {
   contentHeight() {
     this.dimensions = this.content.getContentDimensions();
     this.ContentHeight = this.dimensions.scrollHeight;
-    console.log("CONTENT HEIGHT: " + this.dimensions.scrollHeight);
+    //console.log("CONTENT HEIGHT: " + this.dimensions.scrollHeight);
   }
 
   contentTop() {
@@ -95,8 +95,8 @@ export class Details {
           console.log(this.oldId);
 
           if (this.resp) {
-            //console.log(this.resp);
-            this.rawMsg = this.resp.split("̿̿̿’̵͇̿̿°");
+            console.log(this.resp);
+            this.rawMsg = this.resp.split("fส้้้้´");
             this.rawMsg[0] = this.rawMsg[0].substring(1);
             this.rawMsg.pop();
 
