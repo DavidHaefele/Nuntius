@@ -247,7 +247,6 @@ function displayMessages() {
     try {
 
             $conv = $data->conv;
-            //$conv = "Bifius:Urmel";
             $db = getDB();
             $sql = "SELECT message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
             $stmt = $db->prepare($sql);
@@ -281,7 +280,6 @@ function displayMessages() {
     }
 }
 
-//displayMessages();
 
 function deleteContact() {
         $request = \Slim\Slim::getInstance()->request();
