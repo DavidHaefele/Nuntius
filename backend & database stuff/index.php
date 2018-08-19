@@ -245,11 +245,14 @@ function displayMessages() {
     $data = json_decode($request->getBody());
 
     try {
-                        $conv = $data->conv;
+
+            $conv = $data->conv;
             $db = getDB();
-            $sql = "SELECT message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";            $stmt = $db->prepare($sql);
+            $sql = "SELECT message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
+            $stmt = $db->prepare($sql);
             $stmt->execute();
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);                        $result = $stmt->fetchAll();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
 
             $sql1 = "SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
             $stmt1 = $db->prepare($sql1);
@@ -258,7 +261,7 @@ function displayMessages() {
 
             $endresult = "";
             foreach($result as $row) {
-                        $endresult = $endresult.$row['message']."".$row['author']."";
+                        $endresult = $endresult.$row['message']."fส้้้้´".$row['author']."fส้้้้´";
                         }
 
             $db = null;
