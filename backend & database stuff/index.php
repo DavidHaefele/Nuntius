@@ -386,51 +386,52 @@ function deltaMsg() {
 
 /* ### User registration ### */
 function signup() {
-    $request = \Slim\Slim::getInstance()->request();
-    $data = json_decode($request->getBody());
+	$request = \Slim\Slim::getInstance()->request();
+	$data = json_decode($request->getBody());
     $username=$data->username;
     $password=$data->password;
-
     try {
 
         $username_check = preg_match('~^[A-Za-z0-9_]{3,20}$~i', $username);
         $password_check = preg_match('~^[A-Za-z0-9!@#$%^&*()_]{6,20}$~i', $password);
-
+		
         if (strlen(trim($username))>0 && strlen(trim($password))>0 && $username_check>0 && $password_check>0)
         {
-            echo 'here';
             $db = getDB();
-            $userData = '';
             $sql = "SELECT user_id FROM users WHERE username=:username";
             $stmt = $db->prepare($sql);
             $stmt->bindParam("username", $username,PDO::PARAM_STR);
             $stmt->execute();
             $mainCount=$stmt->rowCount();
             $created=time();
-            if($mainCount==0)
+            if($mainCount == 0)
             {
-
-                /*Inserting user values*/
+				$db = getDB();
                 $sql1="INSERT INTO users(username,password)VALUES(:username,:password)";
                 $stmt1 = $db->prepare($sql1);
                 $stmt1->bindParam("username", $username,PDO::PARAM_STR);
                 $password=hash('sha256',$data->password);
                 $stmt1->bindParam("password", $password,PDO::PARAM_STR);
-                $stmt1->execute();
-
-            }
-
+				$stmt1->execute();
+				
+				$db = getDB();
+				$sql2 = "SELECT user_id, username FROM users WHERE username=:username";
+				$stmt2 = $db->prepare($sql2);
+				$stmt2->bindParam("username", $username,PDO::PARAM_STR);
+				$stmt2->execute();
+				$userData = $stmt2->fetch(PDO::FETCH_OBJ);
+				if($userData){
+					$userData = json_encode($userData);
+                echo '{"userData": ' . $userData . '}';
+				} else {
+					echo '{"error":{"text":"Bad request wrong username and password"}}';
+				}
+            }else{
+				echo '{"error":{"text":"Enter another name"}}';
+			}
             $db = null;
 
-
-            if($userData){
-               $userData = json_encode($userData);
-                echo '{"userData": ' .$userData . '}';
-            } else {
-               echo '{"error":{"text":"Enter valid data"}}';            }
-
-
-        }
+		}
         else{
             echo '{"error":{"text":"Enter valid data"}}';
         }

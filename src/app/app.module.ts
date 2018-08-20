@@ -14,6 +14,7 @@ import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 import { AddContact } from '../pages/addcontact/addcontact';
+import { WelcomeSlidesPage } from "../pages/welcomeslides/welcomeslides";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -34,6 +35,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     Login,
     AddContact,
     TabsPage,
+    WelcomeSlidesPage
   ],
   imports: [
     BrowserModule, HttpModule,
@@ -52,7 +54,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     Signup,
     Login,
     AddContact,
-    TabsPage
+    TabsPage,
+    WelcomeSlidesPage
   ],
   providers: [
     StatusBar,

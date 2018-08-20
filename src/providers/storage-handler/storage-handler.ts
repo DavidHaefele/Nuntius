@@ -9,8 +9,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class StorageHandlerProvider {
   name: any;
-  usrID: any;
-  usr: any;
+  user_id: any;
   design: String = "blue";
   data: String = "";
 
@@ -20,9 +19,9 @@ export class StorageHandlerProvider {
 
   getUsername() {
     this.data = localStorage.getItem('userData');
-    this.name = this.data.split(",");
-    this.name = this.name[1].split("\"");
-    this.usr = this.name[3].split(",");
-    return this.usr;
+    this.name = this.data.split("\"");
+    this.user_id = this.name[5];
+    this.name = this.name[9];
+    return this.name;
   }
 }

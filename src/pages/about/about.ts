@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 import { AlertController } from 'ionic-angular';
+import { WelcomeSlidesPage } from '../welcomeslides/welcomeslides';
 
 @Component({
   selector: 'page-about',
