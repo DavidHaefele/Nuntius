@@ -39,11 +39,9 @@ export class Login {
         else {
           this.presentToast("Please give valid username and password");
         }
-
-
-
       }, (err) => {
         //Connection failed message
+        this.presentToast("Could not connect to the server");
       });
     }
     else {

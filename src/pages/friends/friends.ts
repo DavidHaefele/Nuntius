@@ -57,7 +57,7 @@ export class FriendsPage {
         }
       }, (err) => {
         //Connection failed message
-        this.presentToast(err);
+        this.presentToast("Could not connect to the server");
       });
     }
     else {

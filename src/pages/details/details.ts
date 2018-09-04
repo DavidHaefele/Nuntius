@@ -120,7 +120,8 @@ export class Details {
         }
       }, (err) => {
         //Connection failed message
-        this.presentToast("Connection failed. Error: " + err);
+        this.presentToast("Could not connect to the server");
+       // this.presentToast("Connection failed. Error: " + err);
       });
     }
     else {

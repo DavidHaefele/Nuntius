@@ -44,6 +44,7 @@ export class Signup {
           }
         }, (err) => {
           //Connection failed message
+          this.presentToast("Could not connect to the server");
         });
       } else {
         this.presentToast("Bitte gib dein Passwort erneut ein.");
