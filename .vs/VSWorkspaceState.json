@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\app",
     "\\src\\pages",
     "\\src\\pages\\about",
-    "\\src\\pages\\contact",
+    "\\src\\pages\\addcontacttofriends",
     "\\src\\pages\\details",
+    "\\src\\pages\\friends",
     "\\src\\pages\\login",
-    "\\src\\pages\\tabs",
-    "\\src\\providers"
+    "\\src\\providers",
+    "\\src\\providers\\storage-handler"
   ],
-  "SelectedNode": "\\src\\providers\\auth-service.ts",
+  "SelectedNode": "\\src\\pages\\details\\details.scss",
   "PreviewInSolutionExplorer": false
 }

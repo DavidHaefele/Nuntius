@@ -8,12 +8,12 @@ import { SplitPane } from '../providers/split-pane';
 import { HttpModule } from "@angular/http";
 import { Welcome } from '../pages/welcome/welcome';
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
+import { FriendsPage } from '../pages/friends/friends';
 import { Details } from '../pages/details/details';
 import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
-import { AddContact } from '../pages/addcontact/addcontact';
+import { AddContactToFriends } from '../pages/addcontacttofriends/addcontacttofriends';
 import { WelcomeSlidesPage } from "../pages/welcomeslides/welcomeslides";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -29,11 +29,11 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     MyApp,
     Welcome,
     AboutPage,
-    ContactPage,
+    FriendsPage,
     Details,
     Signup,
     Login,
-    AddContact,
+    AddContactToFriends,
     TabsPage,
     WelcomeSlidesPage
   ],
@@ -49,11 +49,11 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     MyApp,
     Welcome,
     AboutPage,
-    ContactPage,
+    FriendsPage,
     Details,
     Signup,
     Login,
-    AddContact,
+    AddContactToFriends,
     TabsPage,
     WelcomeSlidesPage
   ],
