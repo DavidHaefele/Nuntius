@@ -7,16 +7,14 @@ $app = new \Slim\Slim();
 
 $app->post('/login','login'); /* User login */
 $app->post('/signup','signup'); /* User Signup  */
-$app->post('/getFriends','getFriends');
-$app->post('/getAvailableContacts','getAvailableContacts');
-$app->post('/addContactAsFriend','addContactAsFriend');
+$app->post('/getContacts','getContacts');
+$app->post('/getFriend','getFriend');
+$app->post('/addConv','addConv');
 $app->post('/sendMessage','sendMessage');
 $app->post('/displayMessages','displayMessages');
-$app->post('/deleteFriend','deleteFriend');
+$app->post('/deleteContact','deleteContact');
 $app->post('/lastMsg','lastMsg');
 $app->post('/deltaMsg','deltaMsg');
-$app->post('/getID','getID');
-$app->post('/getName','getName');
 
 $app->run();
 
@@ -61,100 +59,40 @@ function login() {
     }
 }
 
-function getFriends() {
+function getContacts() {
         $request = \Slim\Slim::getInstance()->request();
         $data = json_decode($request->getBody());
-    try {
-		//Rufe alle Konversationen ab, bei der die ID des Nutzers vor kommt
-        $db = getDB();
-        $userIDs ='';
-        $ownID=$data->user_id;
-        $sql = "SELECT identifier FROM total_message WHERE identifier LIKE '%".$ownID."%' OR '%".$ownID."%'";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-		$mainCount=$stmt->rowCount();
-        $userIDs = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $userIDs = $stmt->fetchAll();
-        $db = null;
-		if($mainCount != 0){
-				//Erhalte für jede fremde ID den dazugehörigen Nutzernamen
-				$p = 0;
-                foreach($userIDs as $row) {
-					$conv = $row['identifier'];
-					$convArray = explode(':', $conv);
-					$doublecheck = false;
-					for($i = 0; $i < 2; $i++){
-						if($convArray[$i] == $ownID){
-						$doublecheck = true;
-						}
-					}
-					if($doublecheck == true)
-					{
-						for($i = 0; $i < 2; $i++){
-							if($convArray[$i] != $ownID){
-								$friendID = $convArray[$i];
-								$usernameResult = '';
-								$db = getDB();
-								$userIDs ='';
-								$sql = "SELECT username FROM users WHERE user_id = '".$friendID."'";
-								$stmt = $db->prepare($sql);
-								$stmt->execute();
-								$usernameResult = $stmt->fetch(PDO::FETCH_OBJ);
-							
-								foreach($usernameResult as $friendName){
-									//Füge alles aneinander und schick es zum Typescript
-									if($p == 0){
-										$friendlist = '{"friend'.$p.'":{"username":"'.$friendName.'","user_id":"'.$friendID.'"}';
-									}else{
-										$friendlist = $friendlist.',"friend'.$p.'":{"username":"'.$friendName.'","user_id":"'.$friendID.'"}';
-									}
-									$p++;
-								}
-							}
-							$db = null;
-						}
-					}
-					$doublecheck = false;
-                }
-				$friendlist = '{"friendlist":'.$friendlist.'}}';
-				echo $friendlist;
-				return;
-        } else {
-            echo '{"error":{"text":"no user data"}}';
-		}
-
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
 
 
-function getAvailableContacts() {
-        $request = \Slim\Slim::getInstance()->request();
-        $data = json_decode($request->getBody());
         try {
+
         $db = getDB();
         $userData ='';
         $username=$data->username;
-        $sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
+        $sql = "SELECT identifier FROM total_message WHERE identifier LIKE '%".$username."%'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $userData = $stmt->fetchAll();
 
+        if(!empty($userData))
+        {
+
+        }
+
         $db = null;
-        if($userData){
-                    $endresult ='';
+         if($userData){
+                $endresult ='';
                 foreach($userData as $row) {
-                    $endresult = $endresult.$row['username'].':'.$row['user_id'].':';
+                        $endresult = $endresult.$row['identifier'].':';
                 }
                 if(!empty($endresult)){
-                    $endresult = json_encode($endresult);
-                    echo '{"userData": ' . $endresult . '}';
+                        $endresult = json_encode($endresult);
+                        echo '{"userData": ' . $endresult . '}';
                 }
+
                 else {
-                    echo '{"error":{"text":"empty response"}}';
+                        echo '{"error":{"text":"empty "}}';
                 }
 
             } else {
@@ -167,7 +105,54 @@ function getAvailableContacts() {
     }
 }
 
-function addContactAsFriend() {
+
+function getFriend() {
+                $request = \Slim\Slim::getInstance()->request();
+        $data = json_decode($request->getBody());
+
+
+        try {
+
+        $db = getDB();
+        $userData ='';
+                $username=$data->username;
+        $sql = "SELECT username FROM users WHERE username LIKE '%".$username."%'";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+                $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $userData = $stmt->fetchAll();
+
+        if(!empty($userData))
+        {
+
+        }
+
+                        $db = null;
+         if($userData){
+                        $endresult ='';
+                foreach($userData as $row) {
+                        $endresult = $endresult.$row['username'].':';
+                }
+                if(!empty($endresult)){
+                        $endresult = json_encode($endresult);
+                        echo '{"userData": ' . $endresult . '}';
+                }
+
+                else {
+                        echo '{"error":{"text":"empty response"}}';
+                }
+
+            } else {
+               echo '{"error":{"text":"no user data"}}';
+            }
+
+    }
+    catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+function addConv() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
@@ -199,8 +184,7 @@ function addContactAsFriend() {
                $userData = json_encode($userData);
                 echo '{"userDataC": ' .$userData . '}';
             } else {
-               echo '{"error":{"text":"Enter valid data"}}';
-			}
+               echo '{"error":{"text":"Enter valid data"}}';            }
 
     }
     catch(PDOException $e) {
@@ -209,88 +193,44 @@ function addContactAsFriend() {
 }
 
 function sendMessage() {
-    $request = \Slim\Slim::getInstance()->request();
-    $data = json_decode($request->getBody());
-    try {
-        $db = getDB();
-        $sql = "UPDATE total_message SET total_messages = total_messages + 1 WHERE identifier = :conv";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
-        $stmt->execute();
-
-        $sql1 = "SELECT total_messages FROM total_message WHERE identifier = :conv";
-        $stmt1 = $db->prepare($sql1);
-        $stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
-        $stmt1->execute();
-        $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt1->fetchAll();
-
-        foreach($result as $row) {
-            $total = $total.$row['total_messages'];
-        }
-		$conv = $data->conv . ":" . $total;
-		$sql2="INSERT INTO messages(identifier_message_number, message, author) VALUES ('".$conv."', :message, :author)";
-        $stmt2 = $db->prepare($sql2);
-        $stmt2->bindParam("message", $data->message,PDO::PARAM_STR);
-        $stmt2->bindParam("author", $data->author,PDO::PARAM_STR);
-        $stmt2->execute();
-        $db = null;
-        if($total){
-            $total = json_encode($total);
-            echo '{"total": ' .$total . '}';
-        } else {
-            echo '{"error":{"text":"Error in else"}}';
-        }
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
-
-function getID(){
-	$request = \Slim\Slim::getInstance()->request();
-    $data = json_decode($request->getBody());
-    try {
-
-            $db = getDB();
-            $sql1="SELECT user_id FROM `users` WHERE username='".$data."'";
-            $stmt1 = $db->prepare($sql1);
-            $stmt1->execute();
-			$user_id = $stmt1->fetch(PDO::FETCH_OBJ);
-            $db = null;
-
-            if($user_id){
-               $user_id = json_encode($user_id);
-                echo '{"user_id": ' .$user_id . '}';
-            } else {
-               echo '{"error":{"text":"Enter valid data"}}';            
-            }
-
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
-
-function getName(){
-	$request = \Slim\Slim::getInstance()->request();
+        $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
 
             $db = getDB();
-            $sql="SELECT username FROM `users` WHERE user_id='".$data."'";
+            $sql = "UPDATE total_message SET total_messages = total_messages + 1 WHERE identifier = :conv";
             $stmt = $db->prepare($sql);
+            $stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
             $stmt->execute();
-			$username = $stmt->fetch(PDO::FETCH_OBJ);
+
+            $sql1 = "SELECT total_messages FROM total_message WHERE identifier = :conv";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
+            $stmt1->execute();
+            $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
+                        $result = $stmt1->fetchAll();
+
+            foreach($result as $row) {
+                        $total = $total.$row['total_messages'];
+                        }
+
+
+            $conv = $data->conv . ":" . $total;
+
+            $sql2="INSERT INTO messages(identifier_message_number, message, author) VALUES ('".$conv."', :message, :author)";
+            $stmt2 = $db->prepare($sql2);
+            $stmt2->bindParam("message", $data->message,PDO::PARAM_STR);
+            $stmt2->bindParam("author", $data->author,PDO::PARAM_STR);
+            $stmt2->execute();
+
             $db = null;
 
-
-            if($username){
-               $username = json_encode($username);
-                echo '{"username": ' .$username . '}';
+            if($total){
+               $total = json_encode($total);
+                echo '{"total": ' .$total . '}';
             } else {
-               echo '{"error":{"text":"Enter valid data"}}';            
+               echo '{"error":{"text":"Error in else"}}';
             }
 
     }
@@ -298,46 +238,42 @@ function getName(){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
 
 function displayMessages() {
-    $request = \Slim\Slim::getInstance()->request();
+        $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
-	
+
     try {
-		
-			//Lies alle nachrichten zwischen zwei Nutzern heraus
+
             $conv = $data->conv;
             $db = getDB();
-            $sql = "SELECT identifier_message_number,message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
+            $sql = "SELECT message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
             $stmt = $db->prepare($sql);
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
 
-			if($result){
-				//erstelle ein JSON string, in dem du alle Nachrichten und ihre Informationen in einer liste aufzählst
-				$msg = "";
-				$messagelist = '{"messagelist":';
-				$messagenumber = 0;
-				$maxnumber = sizeof($result);
-				foreach($result as $row) {
-					$identifier_message_number = $row['identifier_message_number']; 
-					$messageArray = explode(':',$identifier_message_number);
-					$messageID = $messageArray[sizeof($messageArray)-1];
-					if($messagenumber == 0){
-						$msg = '{"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$row['author'].'","id":"'.$messageID.'"}';
-					}else{
-						$msg = $msg.',"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$row['author'].'","id":"'.$messageID.'"}';
-					}
-					$messagenumber = $messagenumber+1;
-				}
-				$messagelist = $messagelist.$msg."}}";
-				$db = null;
-				echo $messagelist;
-			}else{
-				echo '{"error":{"text":"No messages"}}';;
-				return;
-			}
+            $sql1 = "SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->execute();
+            $endresult1 = $stmt1->fetch(PDO::FETCH_OBJ);
+
+            $endresult = "";
+            foreach($result as $row) {
+                        $endresult = $endresult.$row['message']."fส้้้้´".$row['author']."fส้้้้´";
+                        }
+
+            $db = null;
+
+            if($endresult){
+               $endresult = json_encode($endresult);
+               $endresult1 = json_encode($endresult1);
+                echo '{"disMes": ' .$endresult . ', "oldId": ' . $endresult1 . '}';
+            } else {
+               echo '{"error":{"text":"Error in else"}}';
+            }
+
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
@@ -345,29 +281,30 @@ function displayMessages() {
 }
 
 
-function deleteFriend() {
-    $request = \Slim\Slim::getInstance()->request();
+function deleteContact() {
+        $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
-            $conv = $data->conv;
+                        $conv = $data->conv;
             $db = getDB();
             $sql = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
             $stmt = $db->prepare($sql);
             $stmt->execute();
 
-            $sql1 = "DELETE FROM total_message WHERE identifier LIKE '%".$conv."%'";
-            $stmt1 = $db->prepare($sql1);
-            $stmt1->execute();
+                        $sql1 = "DELETE FROM total_message WHERE identifier LIKE '%".$conv."%'";
+                        $stmt1 = $db->prepare($sql1);
+                        $stmt1->execute();
 
             $endresult = $data->conv;
 
             $db = null;
 
             if($endresult){
-                echo '{"success": "true"}';
+               $endresult = json_encode($endresult);
+                echo '{"disMes": ' .$endresult . '}';
             } else {
-               echo '{"error":{"text":"Please try again later"}}';
+               echo '{"error":{"text":"Error in else"}}';
             }
 
     }
@@ -382,8 +319,8 @@ function lastMsg() {
     $data = json_decode($request->getBody());
 
     try {
-            $conv = $data->conv;
-            $nr = $data->nr;
+                        $conv = $data->conv;
+                        $nr = $data->nr;
             $db = getDB();
             $sql = "SELECT message FROM messages WHERE id=(SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%')";
             $stmt = $db->prepare($sql);
@@ -394,7 +331,7 @@ function lastMsg() {
 
             if($endresult){
                $endresult = json_encode($endresult);
-                echo '{"disMes":' .$endresult . ', "nr": ' .$nr.'}';
+                echo '{"disMes": ' .$endresult . ', "nr": ' .$nr.'}';
             } else {
                 $endresult = json_encode("");
                 echo '{"disMes": ' .$endresult . ', "nr": ' .$nr.'}';
@@ -408,39 +345,37 @@ function lastMsg() {
 
 
 function deltaMsg() {
-    $request = \Slim\Slim::getInstance()->request();
+        $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
+
     try {
-        $change = '0';
-        $oldId = $data->oldId;
-        $conv = $data->conv;
-        $db = getDB();
-        $sql = "SELECT total_messages FROM total_message WHERE identifier LIKE '%".$conv."%'";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        //$endresult = $stmt->fetch(PDO::FETCH_OBJ);
-		$mainCount = $stmt->rowCount();
-		$endresult = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $endresult = $stmt->fetchAll();
-		$db = null;
-		if($mainCount != 0){
-			foreach($endresult as $row) {
-				if($row['total_messages'] != $oldId)
-				{
-					$change = 1;
-					$change = json_encode($change);
-					echo $change;
-					return;
-				}else{
-					$change = 0;
-					$change = json_encode($change);
-					echo $change;
-					return;
-				}
-			}
-		} else {
-			echo '{"error":{"text":"Error in else"}}';
-        }
+                        $change = '0';
+                        $oldId = $data->oldId;
+                        $conv = $data->conv;
+            $db = getDB();
+            $sql = "SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $endresult = $stmt->fetch(PDO::FETCH_OBJ);
+
+            $db = null;
+
+            if($endresult){
+                                $endresult= json_encode($endresult);
+                                if($endresult != $oldId) {
+                                        $change = '1';
+                                        $change = json_encode($change);
+                                        echo '{"change": ' .$change . '}';
+                                }
+
+                                else {
+                                        $change = json_encode($change);
+                                        echo '{"change": ' .$change . '}';
+                                }
+            } else {
+               echo '{"error":{"text":"Error in else"}}';
+            }
+
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 import { AlertController } from 'ionic-angular';
+import { WelcomeSlidesPage } from '../welcomeslides/welcomeslides';
 
 @Component({
   selector: 'page-about',
@@ -13,7 +14,6 @@ export class AboutPage {
 
   }
 
-  //Alert with multiple themes to choose from
   themeTab() {
     console.log("Theme PopUp");
     let alert = this.alertCtrl.create();
@@ -45,7 +45,6 @@ export class AboutPage {
     alert.present();
   }
 
-  //name self explanatory
   checkCurrentDesign() {
     this.presentToast("Current design is " + this.storageH.design.toString());
   }

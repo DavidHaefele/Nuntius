@@ -22,7 +22,6 @@ export class Signup {
     console.log('ionViewDidLoad Signup');
   }
 
-  //self explaining
   signup() {
     if (this.userData.username && this.userData.password) {
       if (this.userData.password == this.userData.repeatpassword) {
@@ -54,6 +53,7 @@ export class Signup {
     else {
       this.presentToast("Bitte fülle alle Felder aus.");
     }
+
   }
 
   presentToast(msg) {
