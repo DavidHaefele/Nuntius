@@ -127,7 +127,6 @@ export class Details {
       this.presentToast("Could not load messages. Try again!");
     }
   }
-
   //UP TO DATE
   //send a message to the other account
   msgSend() {
