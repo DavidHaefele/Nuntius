@@ -15,6 +15,7 @@ $app->post('/displayMessages','displayMessages');
 $app->post('/deleteContact','deleteContact');
 $app->post('/lastMsg','lastMsg');
 $app->post('/deltaMsg','deltaMsg');
+$app->post('/createGroup','createGroup');
 
 $app->run();
 
@@ -63,13 +64,80 @@ function getContacts() {
         $request = \Slim\Slim::getInstance()->request();
         $data = json_decode($request->getBody());
 
-
         try {
 
         $db = getDB();
         $userData ='';
         $username=$data->username;
         $sql = "SELECT identifier FROM total_message WHERE identifier LIKE '%".$username."%'";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $userData = $stmt->fetchAll();
+
+        //fetches groups of which the user is a participant
+        $groupData='';
+        $sql1 = "SELECT name FROM groups WHERE members LIKE '%".$username."%'";
+        $stmt1 = $db->prepare($sql1);
+        $stmt1->execute();
+        $groupData = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
+        $groupData = $stmt1->fetchAll();
+
+
+        $db = null;
+         if($userData || $groupData){
+                $endresult ='';
+                foreach($userData as $row) {
+                        $endresult = $endresult.$row['identifier'].':';
+                }
+
+                $endresult1 ='';
+                foreach($groupData as $row) {
+                        $endresult1 = $endresult1.$row['name'].':';
+                }
+
+                if(!empty($endresult) && !empty($endresult1)){
+                        $endresult = json_encode($endresult);
+                        $endresult1 = json_encode($endresult1);
+                        echo '{"userData": ' . $endresult . ', "groupData": ' . $endresult1 . ' }';
+                }
+
+                else if(!empty($endresult) && empty($endresult1)){
+                        $endresult = json_encode($endresult);
+                        echo '{"userData": ' . $endresult . ', "groupData": "empty" }';
+                }
+
+                else if(empty($endresult) && !empty($endresult1)){
+                        $endresult1 = json_encode($endresult1);
+                        echo '{"userData": "empty", "groupData": ' . $endresult1 . ' }';
+                }
+
+                else {
+                        echo '{"error":{"text":"empty "}}';
+                }
+
+            } else {
+               echo '{"userData": "empty", "groupData": "empty" }';
+            }
+
+    }
+    catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+
+function getFriend() {
+        $request = \Slim\Slim::getInstance()->request();
+        $data = json_decode($request->getBody());
+
+
+        try {
+
+        $db = getDB();
+        $userData ='';
+        $username=$data->username;
+        $sql = "SELECT username FROM users WHERE username LIKE '%".$username."%'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -82,54 +150,7 @@ function getContacts() {
 
         $db = null;
          if($userData){
-                $endresult ='';
-                foreach($userData as $row) {
-                        $endresult = $endresult.$row['identifier'].':';
-                }
-                if(!empty($endresult)){
-                        $endresult = json_encode($endresult);
-                        echo '{"userData": ' . $endresult . '}';
-                }
-
-                else {
-                        echo '{"error":{"text":"empty "}}';
-                }
-
-            } else {
-               echo '{"error":{"text":"no user data"}}';
-            }
-
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
-
-
-function getFriend() {
-                $request = \Slim\Slim::getInstance()->request();
-        $data = json_decode($request->getBody());
-
-
-        try {
-
-        $db = getDB();
-        $userData ='';
-                $username=$data->username;
-        $sql = "SELECT username FROM users WHERE username LIKE '%".$username."%'";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-                $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $userData = $stmt->fetchAll();
-
-        if(!empty($userData))
-        {
-
-        }
-
-                        $db = null;
-         if($userData){
-                        $endresult ='';
+              $endresult ='';
                 foreach($userData as $row) {
                         $endresult = $endresult.$row['username'].':';
                 }
@@ -193,7 +214,7 @@ function addConv() {
 }
 
 function sendMessage() {
-        $request = \Slim\Slim::getInstance()->request();
+    $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
@@ -210,13 +231,10 @@ function sendMessage() {
             $stmt1->execute();
             $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
                         $result = $stmt1->fetchAll();
-
             foreach($result as $row) {
                         $total = $total.$row['total_messages'];
                         }
-
-
-            $conv = $data->conv . ":" . $total;
+            $conv = $data->conv . ":" . $total;;
 
             $sql2="INSERT INTO messages(identifier_message_number, message, author) VALUES ('".$conv."', :message, :author)";
             $stmt2 = $db->prepare($sql2);
@@ -241,20 +259,23 @@ function sendMessage() {
 
 
 function displayMessages() {
-        $request = \Slim\Slim::getInstance()->request();
+    $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
-
+            $user = $data->user;
             $conv = $data->conv;
             $db = getDB();
+
             $sql = "SELECT message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
+
             $stmt = $db->prepare($sql);
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
 
             $sql1 = "SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+
             $stmt1 = $db->prepare($sql1);
             $stmt1->execute();
             $endresult1 = $stmt1->fetch(PDO::FETCH_OBJ);
@@ -280,21 +301,26 @@ function displayMessages() {
     }
 }
 
-
 function deleteContact() {
-        $request = \Slim\Slim::getInstance()->request();
+    $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
-                        $conv = $data->conv;
+            $conv = $data->conv;
             $db = getDB();
             $sql = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
             $stmt = $db->prepare($sql);
             $stmt->execute();
 
-                        $sql1 = "DELETE FROM total_message WHERE identifier LIKE '%".$conv."%'";
-                        $stmt1 = $db->prepare($sql1);
-                        $stmt1->execute();
+            $sql1 = "DELETE FROM total_message WHERE identifier LIKE '%".$conv."%'";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->execute();
+
+            if($data->type == "group") {
+              $sql2 = "DELETE FROM groups WHERE name LIKE '%".$conv."%'";
+              $stmt2 = $db->prepare($sql2);
+              $stmt2->execute();
+            }
 
             $endresult = $data->conv;
 
@@ -315,26 +341,32 @@ function deleteContact() {
 
 
 function lastMsg() {
-        $request = \Slim\Slim::getInstance()->request();
+    $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
-                        $conv = $data->conv;
-                        $nr = $data->nr;
+            $conv = $data->conv;
+            $nr = $data->nr;
             $db = getDB();
             $sql = "SELECT message FROM messages WHERE id=(SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%')";
             $stmt = $db->prepare($sql);
             $stmt->execute();
             $endresult = $stmt->fetch(PDO::FETCH_OBJ);
+            $sql1 = "SELECT author FROM messages WHERE id=(SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%')";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->execute();
+            $endresult1 = $stmt1->fetch(PDO::FETCH_OBJ);
 
             $db = null;
 
             if($endresult){
                $endresult = json_encode($endresult);
-                echo '{"disMes": ' .$endresult . ', "nr": ' .$nr.'}';
+               $endresult1 = json_encode($endresult1);
+                echo '{"disMes": ' .$endresult . ', "author": ' .$endresult1 . ', "nr": ' .$nr.'}';
             } else {
                 $endresult = json_encode("");
-                echo '{"disMes": ' .$endresult . ', "nr": ' .$nr.'}';
+                $endresult1 = json_encode("");
+                echo '{"disMes": ' .$endresult . ', "author": ' .$endresult1 . ', "nr": ' .$nr.'}';
             }
 
     }
@@ -383,55 +415,104 @@ function deltaMsg() {
 }
 
 
+function createGroup() {
+  $request = \Slim\Slim::getInstance()->request();
+  $data = json_decode($request->getBody());
+
+  try {
+
+          $db = getDB();
+          $userData = 'test';
+          $sql = "SELECT name FROM groups WHERE name=:name";
+          $stmt = $db->prepare($sql);
+          $stmt->bindParam("name", $data->name,PDO::PARAM_STR);
+          $stmt->execute();
+          $mainCount=$stmt->rowCount();
+          $created=time();
+          if($mainCount==0)
+          {
+
+              /*Inserting group name and members*/
+              $sql1="INSERT INTO groups(name, members)VALUES(:name, :members)";
+              $stmt1 = $db->prepare($sql1);
+              $stmt1->bindParam("name", $data->name,PDO::PARAM_STR);
+              $stmt1->bindParam("members", $data->members,PDO::PARAM_STR);
+              $stmt1->execute();
+
+              /*Inserting conversation*/
+              $sql2="INSERT INTO total_message(identifier, total_messages)VALUES(:name,0)";
+              $stmt2 = $db->prepare($sql2);
+              $stmt2->bindParam("name", $data->name,PDO::PARAM_STR);
+              $stmt2->execute();
+
+          }
+
+          $db = null;
+
+
+          if($userData){
+             $userData = json_encode($userData);
+              echo '{"groupData": ' .$userData . '}';
+          } else {
+             echo '{"error":{"text":"Enter valid data"}}';            }
+      }
+
+      catch(PDOException $e) {
+          echo '{"error":{"text":'. $e->getMessage() .'}}';
+      }
+}
+
 
 /* ### User registration ### */
 function signup() {
-	$request = \Slim\Slim::getInstance()->request();
-	$data = json_decode($request->getBody());
+    $request = \Slim\Slim::getInstance()->request();
+    $data = json_decode($request->getBody());
     $username=$data->username;
     $password=$data->password;
+
     try {
 
         $username_check = preg_match('~^[A-Za-z0-9_]{3,20}$~i', $username);
         $password_check = preg_match('~^[A-Za-z0-9!@#$%^&*()_]{6,20}$~i', $password);
-		
+
         if (strlen(trim($username))>0 && strlen(trim($password))>0 && $username_check>0 && $password_check>0)
         {
+            echo 'here';
             $db = getDB();
+            $respData = '';
             $sql = "SELECT user_id FROM users WHERE username=:username";
             $stmt = $db->prepare($sql);
             $stmt->bindParam("username", $username,PDO::PARAM_STR);
             $stmt->execute();
             $mainCount=$stmt->rowCount();
             $created=time();
-            if($mainCount == 0)
+            if($mainCount!=0){
+              $respData = 'exists';
+            }
+
+            else if($mainCount==0)
             {
-				$db = getDB();
+
+                /*Inserting user values*/
                 $sql1="INSERT INTO users(username,password)VALUES(:username,:password)";
                 $stmt1 = $db->prepare($sql1);
                 $stmt1->bindParam("username", $username,PDO::PARAM_STR);
                 $password=hash('sha256',$data->password);
                 $stmt1->bindParam("password", $password,PDO::PARAM_STR);
-				$stmt1->execute();
-				
-				$db = getDB();
-				$sql2 = "SELECT user_id, username FROM users WHERE username=:username";
-				$stmt2 = $db->prepare($sql2);
-				$stmt2->bindParam("username", $username,PDO::PARAM_STR);
-				$stmt2->execute();
-				$userData = $stmt2->fetch(PDO::FETCH_OBJ);
-				if($userData){
-					$userData = json_encode($userData);
-                echo '{"userData": ' . $userData . '}';
-				} else {
-					echo '{"error":{"text":"Bad request wrong username and password"}}';
-				}
-            }else{
-				echo '{"error":{"text":"Enter another name"}}';
-			}
+                $stmt1->execute();
+
+            }
+
             $db = null;
 
-		}
+            if($respData){
+               $respData = json_encode($respData);
+                echo '{"respData": ' .$respData . '}';
+            } else {
+               echo '{"error":{"text":"Enter valid data"}}';            }
+
+
+        }
         else{
             echo '{"error":{"text":"Enter valid data"}}';
         }

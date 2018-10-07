@@ -14,22 +14,45 @@
                            refreshingText="Aktualisiert...">
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list>
-    <ion-item-sliding id="color1" *ngFor="let item of items; let i = index">
-      <button ion-item id="color2" (click)="openNavDetailsPage(item)">
-        <!--<ion-avatar item-start>
-          <img src="../assets/icon/chat.svg.png">
-        </ion-avatar>-->
-        <h2><b>{{ item.name }}</b></h2>
-        <p style="color:white"><small>{{lastMsgArr[i]}}</small></p>
-      </button>
-      <ion-item-options>
-        <button style="background-color:red; color:white" (click)="deleteContact(item)"><ion-icon name="trash"></ion-icon> Entfernen</button>
-      </ion-item-options>
-    </ion-item-sliding>
+  <p style="text-align: center; color: white;">Dialoge</p>
+  <ion-list inset>
+    <ion-card>
+      <ion-item-sliding id="color1" *ngFor="let item of items; let i = index">
+        <button ion-item id="color2" (click)="openNavDetailsPage(item)">
+          <!--<ion-avatar item-start>
+        <img src="../assets/icon/chat.svg.png">
+      </ion-avatar>-->
+          <h2><b>{{ item.name }}</b></h2>
+          <p style="color:white"><small>{{lastMsgArr[i]}}</small></p>
+        </button>
+        <ion-item-options>
+          <button style="background-color:red; color:white" (click)="doConfirm(item, 'contact')"><ion-icon name="trash"></ion-icon> Entfernen</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-card>
   </ion-list>
-  <h2><p style="text-align: center; color: white;">{{ empty }}</p></h2>
+  <h3><p style="text-align: center; color: white;">{{ empty }}</p></h3>
+  <p style="text-align: center; color: white;">Gruppen</p>
+  <ion-list inset>
+    <ion-card>
+      <ion-item-sliding id="color1" *ngFor="let item2 of items2; let i2 = index">
+        <button ion-item id="color2" (click)="openNavDetailsPage(item2)">
+          <!--<ion-avatar item-start>
+        <img src="../assets/icon/chat.svg.png">
+      </ion-avatar>-->
+          <h2><b>{{ item2.name }}</b></h2>
+          <p style="color:white"><small>{{lastAuthorArr[i2] + lastMsgArr2[i2]}}</small></p>
+        </button>
+        <ion-item-options>
+          <button style="background-color:red; color:white" (click)="doConfirm(item2, 'group')"><ion-icon name="trash"></ion-icon> Entfernen</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-card>
+  </ion-list>
+  <h3><p style="text-align: center; color: white;">{{ empty2 }}</p></h3>
 </ion-content>
+
 <ion-footer>
-  <button ion-fab id="color2" class="fixedButton" (click)="addContact()">+</button>
+  <button ion-fab id="color2" class="fixedButton1" (click)="createGroup()"><ion-icon name="contacts"></ion-icon></button>
+  <button ion-fab id="color2" class="fixedButton2" (click)="addContact()"><ion-icon name="contact"></ion-icon></button>
 </ion-footer>

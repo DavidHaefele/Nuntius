@@ -14,6 +14,7 @@ import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
 import { TabsPage } from '../pages/tabs/tabs';
 import { AddContact } from '../pages/addcontact/addcontact';
+import { CreateGroup } from '../pages/creategroup/creategroup';
 import { WelcomeSlidesPage } from "../pages/welcomeslides/welcomeslides";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -34,6 +35,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     Signup,
     Login,
     AddContact,
+    CreateGroup,
     TabsPage,
     WelcomeSlidesPage
   ],
@@ -54,6 +56,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     Signup,
     Login,
     AddContact,
+    CreateGroup,
     TabsPage,
     WelcomeSlidesPage
   ],

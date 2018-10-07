@@ -12,15 +12,16 @@ import { ContactPage } from '../contact/contact';
  */
 @IonicPage()
 @Component({
-  selector: 'page-addcontact',
-  templateUrl: 'addcontact.html',
+  selector: 'page-creategroup',
+  templateUrl: 'creategroup.html',
 })
-export class AddContact {
+export class CreateGroup {
   ownname: any;
+  item;
   items = [];
 
-  userData = { "username": "" };
-  userDataC = { "conv": "" };
+  userData =   { "username": "" };
+  groupData =  { "name": "", "members": "" };
 
   responseData: any;
   resp: any;
@@ -28,10 +29,9 @@ export class AddContact {
   i: number;
 
   friends = [];
-  friend: any;
-
-  conv = [];
-  convstr: any;
+  members = [];
+  member: any;
+  memberstr: string = "";
 
 
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
@@ -48,6 +48,7 @@ export class AddContact {
         this.responseData = result;
         if (this.responseData.userData) {
           this.resp = JSON.stringify(this.responseData.userData);
+          //parsing users in result
           this.friends = this.resp.split(":");
           this.friends[0] = this.friends[0].substring(1);
           this.friends.pop();
@@ -69,39 +70,41 @@ export class AddContact {
 
   }
 
-  //adds new dialogue conversation on database
-  addFriend(item) {
+  //adds members and combines them to string
+  addMember(item) {
     this.items = [];
-    this.friend = item.name;
+    this.member = item.name;
+    this.members.push(this.member);
+
+    for (this.i = 0; this.i < this.members.length; this.i++) {
+      this.memberstr = this.memberstr + this.members[this.i].toString() + ":";
+    }
+  }
+
+  //actually creates new group in database
+  createGroup() {
     this.ownname = this.storageH.getUsername();
+    this.memberstr = this.memberstr + this.ownname.toString();
+    this.groupData.members = this.memberstr;
 
-    this.conv.push({"username": this.friend.toString() });
-    this.conv.push({"username": this.ownname.toString() });
+    if (this.memberstr == this.ownname.toString() + ":" + this.ownname.toString() || this.memberstr == "") {
+      this.presentToast("Füge der Gruppe mehr Mitglieder hinzu");
+      return -1;
+    }
 
-    this.conv.sort(function (a, b) {
-      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
-      if (nameA < nameB) //sort string ascending
-        return -1;
-      if (nameA > nameB)
-        return 1;
-      return 0; //default return value (no sorting)
-    });
-
-    this.convstr = this.conv[0].username + ":" + this.conv[1].username;
-    this.userDataC.conv = this.convstr;
-
-
-    if (this.userDataC.conv) {
-      this.authService.postData(this.userDataC, "addConv").then((result) => {
+    if (this.groupData.members) {
+      this.authService.postData(this.groupData, "createGroup").then((result) => {
         this.responseData = result;
-        if (this.responseData.userDataC) {
-          this.resp = JSON.stringify(this.responseData.userDataC);
-          this.presentToast(item.name + " hinzugefügt");
+        if (this.responseData.groupData) {
+          this.resp = JSON.stringify(this.responseData.groupData);
+          this.presentToast('"' + this.groupData.name + '"' + " wurde hinzugefügt");
           this.navCtrl.pop();
           this.items = [];
+          this.member = "";
+          this.memberstr = "";
         }
         else {
-          this.presentToast("Konnte Kontakt nicht hinzufügen :/");
+          this.presentToast("Could not create group");
         }
       }, (err) => {
         //Connection failed message
@@ -111,9 +114,7 @@ export class AddContact {
     else {
       this.presentToast("Bad Error");
     }
-
   }
-
 
   presentToast(msg) {
     let toast = this.toastCtrl.create({

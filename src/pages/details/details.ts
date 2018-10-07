@@ -13,30 +13,45 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 export class Details {
   @ViewChild('content') content: any;
   @ViewChild('scroll') scroll: any;
-   item;
-   author: String = "";
-   name: any;
-   t: number = 0;
-   Convarr = [];
-   conv: String;
-   testname: any;
-   resp: any;
-   msgOut: any = { "conv": "", "message": "", "author": "" };
-   messages = [];
-  rawMsg = [];
-  dimensions: any;
-   resposeData: any;
-  d: number = 0;
-  userData = { "conv": "" };
-  id: any = 1;
-  id2: any = 1;
-  oldId: any;
+
+  item;
+  item2;
+
+  //data to be sent to the server
+  msgOut: any  = { "conv": "", "message": "", "author": "" };
+  userData     = { "user": "", "conv": "", "type": "" };
   userDataC = { "conv": "", "oldId": "" };
+
+  //server response data
+  resposeData: any;
+  resp: any;
+
+  //used for composing a string including conversation members in dialogue
+  author: String = "";
+  Convarr = [];
+  conv: String;
+
+  //message parsing lists
+  rawMsg = [];
+  messages = [];
+
+  d: number = 0;
+  //used by intervall functions
+  id:  any = 1;
+  id2: any = 1;
+
+  //to recognize new messages
+  oldId:  any;
   change: any;
-  msgSent: Boolean;
-  scrollPos: number;
-  scrollPos0: number;
+
+  //scrolling parameters
+  dimensions:    any;
+  scrollPos:     number;
+  scrollPos0:    number;
   ContentHeight: number;
+
+  msgSent: Boolean;
+  isGroup: Boolean;
 
   scrollToBottom() {
     this.content.scrollToBottom();
@@ -51,7 +66,6 @@ export class Details {
   contentHeight() {
     this.dimensions = this.content.getContentDimensions();
     this.ContentHeight = this.dimensions.scrollHeight;
-    //console.log("CONTENT HEIGHT: " + this.dimensions.scrollHeight);
   }
 
   contentTop() {
@@ -60,6 +74,10 @@ export class Details {
 
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider, public localNotifications: LocalNotifications) {
     this.item = params.data.item;
+    this.isGroup = true;
+    if (this.item.type.toString() != "group") {
+      this.isGroup = false;
+    }
     this.displayMessages();
     this.id = setInterval(() => {
       this.displayMessages();
@@ -84,7 +102,17 @@ export class Details {
   }
 
   displayMessages() {
-    this.getConv();
+    this.userData.user = "";
+
+    if (!this.isGroup) {
+      this.getConv();
+    }
+
+    else {
+      this.userData.user = this.storageH.getUsername().toString();
+      this.userData.conv = this.item.name.toString();
+    }
+      
     if (this.userData.conv) {
       //Api connections
       this.authService.postData(this.userData, "displayMessages").then((result) => {
@@ -95,21 +123,23 @@ export class Details {
           console.log(this.oldId);
 
           if (this.resp) {
-            console.log(this.resp);
+            //parses incoming messages
             this.rawMsg = this.resp.split("fส้้้้´");
             this.rawMsg[0] = this.rawMsg[0].substring(1);
             this.rawMsg.pop();
 
+            //determines whether message was sent by user or by contact
             for (this.d; this.d < this.rawMsg.length; this.d++) {
               if (this.d % 2 == 0) {
                 if (this.rawMsg[this.d + 1] == this.storageH.getUsername().toString()) {
-                  this.messages.push({ "message": this.rawMsg[this.d], "showown": true });
+                  this.messages.push({ "message": this.rawMsg[this.d], "showown": true, "author": this.rawMsg[this.d + 1] });
                 }
                 else {
-                  this.messages.push({ "message": this.rawMsg[this.d], "showown": false });
+                  this.messages.push({ "message": this.rawMsg[this.d], "showown": false, "author": this.rawMsg[this.d + 1] });
                 }
               }
             }
+            //checks for new messages
             this.deltaMsg();
           }
         }
@@ -128,9 +158,14 @@ export class Details {
 
   msgSend() {
     this.msgSent = true;
-    this.getConv();
+    if (!this.isGroup) {
+      this.getConv();
+      this.msgOut.conv = this.userData.conv;
+    }
+    else {
+      this.msgOut.conv = this.item.name.toString();
+    }
 
-    this.msgOut.conv = this.userData.conv;
     this.msgOut.author = this.storageH.getUsername().toString();
     console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
 
@@ -157,7 +192,7 @@ export class Details {
     }
   }
 
-
+  //notifies user when new message appears in chat
   deltaMsg() {
     if (this.msgSent) {
       this.msgSent = false;
@@ -165,7 +200,6 @@ export class Details {
 
     else {
       this.getConv();
-
       this.userDataC.conv = this.userData.conv;
       this.userDataC.oldId = this.oldId;
 
@@ -183,7 +217,6 @@ export class Details {
               this.notify();
 
               this.contentHeight();
-              console.log("NOW HERE!");
               this.scrollTo(0, this.ContentHeight, 1);
             }
           }
@@ -209,6 +242,7 @@ export class Details {
     toast.present();
   }
 
+  //composes a string including conversation members in dialogue
   getConv() {
     this.Convarr = [];
     this.author = this.storageH.getUsername();
