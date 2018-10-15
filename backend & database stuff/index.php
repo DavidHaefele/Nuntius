@@ -12,16 +12,19 @@ $app->post('/getAvailableContacts','getAvailableContacts');
 $app->post('/addContactAsFriend','addContactAsFriend');
 $app->post('/sendMessage','sendMessage');
 $app->post('/displayMessages','displayMessages');
-$app->post('/deleteFriend','deleteFriend');
+$app->post('/deleteConv','deleteConv');
 $app->post('/lastMsg','lastMsg');
 $app->post('/deltaMsg','deltaMsg');
 $app->post('/getID','getID');
 $app->post('/getName','getName');
+$app->post('/getFriend','getFriend');
+$app->post('/createGroup','createGroup');
+$app->post('/getGroups','getGroups');
+$app->post('/isAdmin','isAdmin');
 
 $app->run();
 
-/************************* USER LOGIN *************************************/
-/* ### User login ### */
+//login a user with valid data
 function login() {
 
     $request = \Slim\Slim::getInstance()->request();
@@ -61,11 +64,12 @@ function login() {
     }
 }
 
+//get all contacts of the current user
 function getFriends() {
         $request = \Slim\Slim::getInstance()->request();
         $data = json_decode($request->getBody());
     try {
-		//Rufe alle Konversationen ab, bei der die ID des Nutzers vor kommt
+		//Get all the conversations, where the user ID is present
         $db = getDB();
         $userIDs ='';
         $ownID=$data->user_id;
@@ -77,7 +81,7 @@ function getFriends() {
         $userIDs = $stmt->fetchAll();
         $db = null;
 		if($mainCount != 0){
-				//Erhalte für jede fremde ID den dazugehörigen Nutzernamen
+				//get the username for every unknown ID
 				$p = 0;
                 foreach($userIDs as $row) {
 					$conv = $row['identifier'];
@@ -85,7 +89,7 @@ function getFriends() {
 					$doublecheck = false;
 					for($i = 0; $i < 2; $i++){
 						if($convArray[$i] == $ownID){
-						$doublecheck = true;
+							$doublecheck = true;
 						}
 					}
 					if($doublecheck == true)
@@ -102,7 +106,7 @@ function getFriends() {
 								$usernameResult = $stmt->fetch(PDO::FETCH_OBJ);
 							
 								foreach($usernameResult as $friendName){
-									//Füge alles aneinander und schick es zum Typescript
+									//put everything together and send it back to typescript
 									if($p == 0){
 										$friendlist = '{"friend'.$p.'":{"username":"'.$friendName.'","user_id":"'.$friendID.'"}';
 									}else{
@@ -129,7 +133,52 @@ function getFriends() {
     }
 }
 
+//get all groups of the current user
+function getGroups() {
+	$request = \Slim\Slim::getInstance()->request();
+	$data = json_decode($request->getBody());
+	
+	try {
+		//Get all groups, where the user ID is present
+		$db = getDB();
+		$userData ='';
+		$ownID=$data->user_id;
+		$sql = "SELECT `group_id`,`name` FROM `groups` WHERE members LIKE '%".$ownID."%' OR '%".$ownID."%'";
+		$stmt = $db->prepare($sql);
+        $stmt->execute();
+		$mainCount= $stmt->rowCount();
+        $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $userData = $stmt->fetchAll();
+		$db = null;
+		$grouplist = '';
+		if($mainCount != 0){
+				$p = 0;
+				//put everything together and send it back to typescript
+                foreach($userData as $row) {
+					$usernameResult = '';
+					if($p == 0){
+						$grouplist = '{"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
+					}else{
+						$grouplist = $grouplist.',"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
+					}
+					$p++;
+				}
+		}else{
+			echo '{"error":{"text":"empty response"}}';
+			return;
+		}
+		$grouplist = '{"grouplist":'.$grouplist.'}}';
+		echo $grouplist;
+		return;
+		
+	echo '{"error":{"text":"empty response"}}';
 
+	}catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+//return all available contacts found for the specific input
 function getAvailableContacts() {
         $request = \Slim\Slim::getInstance()->request();
         $data = json_decode($request->getBody());
@@ -167,6 +216,70 @@ function getAvailableContacts() {
     }
 }
 
+//Check if a user is an admin of a group
+function isAdmin(){
+	$request = \Slim\Slim::getInstance()->request();
+    $data = json_decode($request->getBody());
+    try {
+		$db = getDB();
+        $ownID=$data->ownID;
+		$groupID = $data->groupID;
+		$sql = "SELECT name FROM groups WHERE admins LIKE '%$ownID%' AND group_id = $groupID";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+		$mainCount=$stmt->rowCount();
+		if($mainCount != 0){
+			 echo '{"returnValue": true}';
+			 return;
+		}else{
+			echo '{"returnValue": false}';
+			return;
+		}
+	}
+    catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+//return a userID to a username
+function getFriend() {
+        $request = \Slim\Slim::getInstance()->request();
+        $data = json_decode($request->getBody());
+        try {
+        $db = getDB();
+        $userData ='';
+        $username=$data->username;
+        $sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $userData = $stmt->fetchAll();
+
+        $db = null;
+        if($userData){
+                    $endresult ='';
+                foreach($userData as $row) {
+                    $endresult = $endresult.$row['username'].':'.$row['user_id'].':';
+                }
+                if(!empty($endresult)){
+                    $endresult = json_encode($endresult);
+                    echo '{"userData": ' . $endresult . '}';
+                }
+                else {
+                    echo '{"error":{"text":"empty response"}}';
+                }
+
+            } else {
+               echo '{"error":{"text":"no user data"}}';
+            }
+
+    }
+    catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+}
+
+//add a found contact as a friend
 function addContactAsFriend() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
@@ -208,26 +321,64 @@ function addContactAsFriend() {
     }
 }
 
+function createGroup() {
+  $request = \Slim\Slim::getInstance()->request();
+  $data = json_decode($request->getBody());
+
+  try {
+  $db = getDB();
+  $userData = '{"error":{"text":"Group created!"}}';
+  //Inserting group name and members
+  $sql1="INSERT INTO groups(name, members,admins,total_messages)VALUES(:name, :members,:admins, 0)";
+  $stmt1 = $db->prepare($sql1);
+  $stmt1->bindParam("name", $data->name,PDO::PARAM_STR);
+  $stmt1->bindParam("members", $data->members,PDO::PARAM_STR);
+  $stmt1->bindParam("admins", $data->admin,PDO::PARAM_STR);
+  $stmt1->execute();
+  $db = null;
+  if($userData){
+	$userData = json_encode($userData);
+		echo '{"groupData": ' .$userData . '}';
+		return;
+	} else {
+		echo '{"error":{"text":"Enter valid data"}}';
+		return;
+	}
+  }catch(PDOException $e) {
+	echo '{"error":{"text":'. $e->getMessage() .'}}';
+  }
+}
+
+//add a message to a conversation
 function sendMessage() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
     try {
-        $db = getDB();
-        $sql = "UPDATE total_message SET total_messages = total_messages + 1 WHERE identifier = :conv";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
-        $stmt->execute();
+		$db = getDB();
+		if($data->groupMessage){
+			$sql = "UPDATE groups SET total_messages = total_messages + 1 WHERE group_id = :conv";	
+		}else{
+			$sql = "UPDATE total_message SET total_messages = total_messages + 1 WHERE identifier = :conv";
+		}
+		$stmt = $db->prepare($sql);
+		$stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
+		$stmt->execute();
+		
+		if($data->groupMessage){
+			$sql1 = "SELECT total_messages FROM groups WHERE group_id = :conv";
+		}else{
+			$sql1 = "SELECT total_messages FROM total_message WHERE identifier = :conv";
+		}
+		
+		$stmt1 = $db->prepare($sql1);
+		$stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
+		$stmt1->execute();
+		$result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
+		$result = $stmt1->fetchAll();
 
-        $sql1 = "SELECT total_messages FROM total_message WHERE identifier = :conv";
-        $stmt1 = $db->prepare($sql1);
-        $stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
-        $stmt1->execute();
-        $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt1->fetchAll();
-
-        foreach($result as $row) {
-            $total = $total.$row['total_messages'];
-        }
+		foreach($result as $row) {
+			$total = $total.$row['total_messages'];
+		}
 		$conv = $data->conv . ":" . $total;
 		$sql2="INSERT INTO messages(identifier_message_number, message, author) VALUES ('".$conv."', :message, :author)";
         $stmt2 = $db->prepare($sql2);
@@ -247,6 +398,7 @@ function sendMessage() {
     }
 }
 
+//get the ID to a username
 function getID(){
 	$request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
@@ -272,6 +424,7 @@ function getID(){
     }
 }
 
+//get a name to a username (?same as getFriend?)
 function getName(){
 	$request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
@@ -299,13 +452,14 @@ function getName(){
     }
 }
 
+//get all the messages in a conversation
 function displayMessages() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 	
     try {
 		
-			//Lies alle nachrichten zwischen zwei Nutzern heraus
+			//read all messages between the users or in the group
             $conv = $data->conv;
             $db = getDB();
             $sql = "SELECT identifier_message_number,message,author FROM messages WHERE identifier_message_number LIKE '%".$conv."%' ORDER BY id";
@@ -315,19 +469,27 @@ function displayMessages() {
             $result = $stmt->fetchAll();
 
 			if($result){
-				//erstelle ein JSON string, in dem du alle Nachrichten und ihre Informationen in einer liste aufzählst
+				//create a JSON string, which stores all messages and their information
 				$msg = "";
 				$messagelist = '{"messagelist":';
 				$messagenumber = 0;
 				$maxnumber = sizeof($result);
 				foreach($result as $row) {
+
+					$sql2 = "SELECT username FROM users WHERE user_id LIKE '%".$row["author"]."%'";
+					$stmt2 = $db->prepare($sql2);
+					$stmt2->execute();
+					$authorName = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+					$authorName = $stmt2->fetchAll();
+
 					$identifier_message_number = $row['identifier_message_number']; 
 					$messageArray = explode(':',$identifier_message_number);
 					$messageID = $messageArray[sizeof($messageArray)-1];
+
 					if($messagenumber == 0){
-						$msg = '{"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$row['author'].'","id":"'.$messageID.'"}';
+						$msg = '{"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$authorName[0]["username"].'","authorID":"'.$row["author"].'","id":"'.$messageID.'"}';
 					}else{
-						$msg = $msg.',"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$row['author'].'","id":"'.$messageID.'"}';
+						$msg = $msg.',"message'.$messagenumber.'":{"message":"'.$row['message'].'","author":"'.$authorName[0]["username"].'","authorID":"'.$row["author"].'","id":"'.$messageID.'"}';
 					}
 					$messagenumber = $messagenumber+1;
 				}
@@ -344,22 +506,60 @@ function displayMessages() {
     }
 }
 
-
-function deleteFriend() {
+//delete a conversation
+function deleteConv() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
             $conv = $data->conv;
+			$isGroup = $data->isGroup;
+			$user_id = $data->user_id;
+			$asAdmin = $data->asAdmin;
             $db = getDB();
-            $sql = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+			
+			//delete the group if admin deletes it
+			if($asAdmin == true && $isGroup == true){
+				$sql = "DELETE FROM groups WHERE group_id = $conv";
+			
+			//remove user from group
+			}else if($asAdmin == false && $isGroup == true){
+				$sql2 = "SELECT members FROM groups WHERE group_id = $conv";
+				$stmt2 = $db->prepare($sql2);
+				$stmt2->execute();
+				$members = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+				$members = $stmt2->fetchAll();
+				$finalmembers = "";
+				$p = 0;
+				foreach($members as $row){
+					$membersArray = explode(':',$row['members']);
+					foreach($membersArray as $member)
+					{
+						if($member != $user_id){
+							if($p == 0)
+							{
+								$finalmembers = $member;
+								$p++;
+							}else{
+								$finalmembers = $finalmembers.":".$member;
+							}
+						}
+					}
+				}
+				$sql = 'UPDATE groups SET members = "5:7" WHERE group_id = "8"';
+			//remove conversation between two users
+			}else if($isGroup == false){
+				$sql = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+			}
             $stmt = $db->prepare($sql);
             $stmt->execute();
-
-            $sql1 = "DELETE FROM total_message WHERE identifier LIKE '%".$conv."%'";
-            $stmt1 = $db->prepare($sql1);
-            $stmt1->execute();
-
+			
+			//delete all messages of the conversation
+			if($asAdmin == true){
+				$sql1 = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+				$stmt1 = $db->prepare($sql1);
+				$stmt1->execute();
+			}
             $endresult = $data->conv;
 
             $db = null;
@@ -367,46 +567,58 @@ function deleteFriend() {
             if($endresult){
                 echo '{"success": "true"}';
             } else {
-               echo '{"error":{"text":"Please try again later"}}';
+               echo '{"success": "false"}';
             }
 
     }
     catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
+		echo '{"success": "'. $e->getMessage() .'"}';
     }
 }
 
-
+//get the last message of a conversation
 function lastMsg() {
-        $request = \Slim\Slim::getInstance()->request();
+    $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
 
     try {
             $conv = $data->conv;
             $nr = $data->nr;
             $db = getDB();
-            $sql = "SELECT message FROM messages WHERE id=(SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%')";
+            $sql = "SELECT message, author FROM messages WHERE id=(SELECT MAX(id) FROM messages WHERE identifier_message_number LIKE '%".$conv."%')";
             $stmt = $db->prepare($sql);
             $stmt->execute();
-            $endresult = $stmt->fetch(PDO::FETCH_OBJ);
-
-            $db = null;
+			$endresult = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$endresult = $stmt->fetchAll();
 
             if($endresult){
-               $endresult = json_encode($endresult);
-                echo '{"disMes":' .$endresult . ', "nr": ' .$nr.'}';
+				foreach($endresult as $row) {
+					$db = getDB();
+					$sql2 = "SELECT username FROM users WHERE user_id LIKE '%".$row["author"]."%'";
+					$stmt2 = $db->prepare($sql2);
+					$stmt2->execute();
+					$authorName = $stmt2->setFetchMode(PDO::FETCH_ASSOC);
+					$authorName = $stmt2->fetchAll();
+					if($authorName){
+						foreach($authorName as $row2) {
+							$jsonString = '{"message":"'.$row["message"].'","author":"'.$row2['username'].'","id":"'.$nr.'"}';
+							echo $jsonString;
+							return;
+						}
+					}
+				}
             } else {
-                $endresult = json_encode("");
-                echo '{"disMes": ' .$endresult . ', "nr": ' .$nr.'}';
+				$jsonString = '{"message":"","author":"","id":""}';
+				echo $jsonString;
+				return;
             }
-
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
 
-
+//get weather there are new messages or not
 function deltaMsg() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
@@ -418,7 +630,6 @@ function deltaMsg() {
         $sql = "SELECT total_messages FROM total_message WHERE identifier LIKE '%".$conv."%'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
-        //$endresult = $stmt->fetch(PDO::FETCH_OBJ);
 		$mainCount = $stmt->rowCount();
 		$endresult = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $endresult = $stmt->fetchAll();
@@ -449,7 +660,7 @@ function deltaMsg() {
 
 
 
-/* ### User registration ### */
+// User registration
 function signup() {
 	$request = \Slim\Slim::getInstance()->request();
 	$data = json_decode($request->getBody());
@@ -507,7 +718,7 @@ function signup() {
 }
 
 
-/* ### internal Username Details ### */
+// internal Username Details
 function internalUserDetails($input) {
 
     try {

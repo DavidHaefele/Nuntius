@@ -6,6 +6,8 @@ import { StorageHandlerProvider } from '../../providers/storage-handler/storage-
 //import { empty } from 'rxjs/Observer';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
+
+//TODO Handle group chats diffrently from normal chats
 @Component({
   selector: 'page-details',
   templateUrl: 'details.html',
@@ -14,7 +16,7 @@ export class Details {
   @ViewChild('content') content: any;
   @ViewChild('scroll') scroll: any;
   item;
-  msgOut: any = { "conv": "", "message": "", "author": "" };
+  msgOut: any = { "conv": "", "message": "", "author": "", "groupMessage": false};
   messages = [];
   dimensions: any;
   currentScrollPosition = 0;
@@ -22,6 +24,7 @@ export class Details {
   reload: Boolean = false;
   ContentHeight: any;
   displayedMessages = 0;
+  isGroup: Boolean = false;
 
   scrollToBottom() {
     this.content.scrollToBottom();
@@ -41,7 +44,7 @@ export class Details {
     this.dimensions = this.content.getContentDimensions();
     this.ContentHeight = this.dimensions.scrollHeight - 591;
     this.currentScrollPosition = this.dimensions.scrollHeight - this.dimensions.scrollTop - 591;
-    console.log("CONTENT HEIGHT: " + this.ContentHeight + " YOUR SCROLL HIGHT : " + this.currentScrollPosition);
+    //console.log("CONTENT HEIGHT: " + this.ContentHeight + " YOUR SCROLL HIGHT : " + this.currentScrollPosition);
   }
 
   contentTop() {
@@ -50,6 +53,7 @@ export class Details {
 
   constructor(public navCtrl: NavController, params: NavParams, public app: App, private authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider, public localNotifications: LocalNotifications) {
     this.item = params.data.item;
+    this.isGroup = this.item.isGroup;
     this.displayMessages();
     this.id = setInterval(() => {
       this.contentHeight();
@@ -65,6 +69,11 @@ export class Details {
 
   //scroll to the bottom at loading
   ionViewDidEnter() {
+    if (this.item.isGroup) {
+      console.log("isGroup");
+    } else {
+      console.log("isNOTGroup");
+    }
     this.contentTop();
     this.scrollToBottom();
     this.sleep(100).then(() => {
@@ -89,13 +98,12 @@ export class Details {
   ionViewWillLeave() {
     clearInterval(this.id);
   }
-
-  //UP TO DATE
-  //display all messages between the accounts
+  
+  //display all messages between the current user and his contact or group
   displayMessages() {
     this.displayedMessages = 0;
     var userData = { "conv": "" };
-    this.messages = []; 
+    this.messages = [];
     userData.conv = this.storageH.getConv(this.item);
     console.log("checking for messages between " + userData.conv);
     if (userData.conv) {
@@ -104,13 +112,13 @@ export class Details {
         var response: any = result;
         if (result) {
           for (let message in response.messagelist) {
-            if (response.messagelist[message]["author"] == this.storageH.getID().toString()) {
+            if (response.messagelist[message]["authorID"] == this.storageH.getID().toString()) {
               this.displayedMessages++;
-              this.messages.push({ "message": response.messagelist[message]["message"], "showown": true });
+              this.messages.push({ "message": response.messagelist[message]["message"], "author": response.messagelist[message]["author"], "showown": true });
             }
-            else {
+            else{
               this.displayedMessages++;
-              this.messages.push({ "message": response.messagelist[message]["message"], "showown": false });
+              this.messages.push({ "message": response.messagelist[message]["message"], "author": response.messagelist[message]["author"], "showown": false });
             }
           }
         }
@@ -128,14 +136,16 @@ export class Details {
       this.presentToast("Could not load messages. Try again!");
     }
   }
-  //UP TO DATE
-  //send a message to the other account
+
+  //send a message to the other account or group
   msgSend() {
     this.msgOut.conv = "";
     this.msgOut.author = "";
     this.msgOut.conv = this.storageH.getConv(this.item);
+    console.log("Conv is" + this.msgOut.conv);
+    this.msgOut.groupMessage = this.item.isGroup;
     this.msgOut.author = this.storageH.getID().toString();
-    console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author);
+    console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author + " groupMessage=" + this.msgOut.groupMessage.toString());
     if (this.msgOut) {
       //Api connections
       this.authService.postData(this.msgOut, "sendMessage").then((result) => {
@@ -161,15 +171,14 @@ export class Details {
       this.presentToast("Messgage not send. Try again!");
     }
   }
-
- //UP TO DATE
+  
   //check for new messages on reloading
   deltaMsg() {
     var userData = {"conv": "","oldId": "" };
     userData.conv = this.storageH.getConv(this.item);
     userData.oldId = this.displayedMessages.toString();
     if (userData) {
-      //Checkt ob die derzeitig angezeigt Anzahl an Messages der Anzahl an Messages auf dem Server entspricht
+      //Checks weather the current amount of messages is the same as the amount on the server
       this.authService.postData(userData, "deltaMsg").then((result) => {
         var response: any = result;
         if (response) {

@@ -7,11 +7,12 @@ import { SplitPane } from '../providers/split-pane';
 
 import { HttpModule } from "@angular/http";
 import { Welcome } from '../pages/welcome/welcome';
-import { AboutPage } from '../pages/about/about';
+import { SettingsPage } from '../pages/settings/settings';
 import { FriendsPage } from '../pages/friends/friends';
 import { Details } from '../pages/details/details';
 import { Signup } from '../pages/signup/signup';
 import { Login } from '../pages/login/login';
+import { CreateGroup } from '../pages/creategroup/creategroup';
 import { TabsPage } from '../pages/tabs/tabs';
 import { AddContactToFriends } from '../pages/addcontacttofriends/addcontacttofriends';
 import { WelcomeSlidesPage } from "../pages/welcomeslides/welcomeslides";
@@ -28,13 +29,14 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
   declarations: [
     MyApp,
     Welcome,
-    AboutPage,
+    SettingsPage,
     FriendsPage,
     Details,
     Signup,
     Login,
     AddContactToFriends,
     TabsPage,
+    CreateGroup,
     WelcomeSlidesPage
   ],
   imports: [
@@ -48,12 +50,13 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
   entryComponents: [
     MyApp,
     Welcome,
-    AboutPage,
+    SettingsPage,
     FriendsPage,
     Details,
     Signup,
     Login,
     AddContactToFriends,
+    CreateGroup,
     TabsPage,
     WelcomeSlidesPage
   ],

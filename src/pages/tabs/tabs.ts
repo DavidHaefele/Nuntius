@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AboutPage } from '../about/about';
+import { SettingsPage } from '../settings/settings';
 import { FriendsPage } from '../friends/friends';
 
 @Component({
@@ -10,7 +10,7 @@ import { FriendsPage } from '../friends/friends';
 export class TabsPage {
 
   tab1Root = FriendsPage;
-  tab2Root = AboutPage;
+  tab2Root = SettingsPage;
 
   badges;
 

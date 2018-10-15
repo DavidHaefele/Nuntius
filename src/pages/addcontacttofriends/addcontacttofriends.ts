@@ -20,11 +20,10 @@ export class AddContactToFriends {
   items = [];
   responseData: any;
   userData = { "username": "" };
-  resp: any;
   friendnames = [];
   friend_ids = [];
   friend_id: any;
-  own_id: any;
+  ownID = this.storageH.getID();
   conv = [];
   convstr: any;
   responseDataC: any;
@@ -37,32 +36,35 @@ export class AddContactToFriends {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Login');
   }
-  
+
   //Returns a list of found accounts depending on the search
   getAvailableContacts() {
+    this.items = [];
     if (this.userData.username) {
       this.authService.postData(this.userData, "getAvailableContacts").then((result) => {
         this.responseData = result;
         if (this.responseData.userData) {
-          this.resp = JSON.stringify(this.responseData.userData);
-          console.log("All available contacts found: " + this.resp);
-          var friends = this.resp.split(":");
+          let resp = JSON.stringify(this.responseData.userData);
+          console.log("All available contacts found: " + resp);
+          var friends = resp.split(":");
           friends[0] = friends[0].substring(1);
           friends.pop();
           for (var i = 0; i < friends.length; i++) {
-            console.log(friends[i]);
-            if (i % 2 == 0) {
-              this.items.push({ 'name': friends[i], 'user_id': friends[i+1]});
+            if (friends[i + 1] != this.ownID) {
+              console.log(friends[i]);
+              if (i % 2 == 0) {
+                this.items.push({ 'name': friends[i], 'user_id': friends[i + 1] });
+              }
             }
           }
-            this.friendnames = [];
-            for (var i = 0; i < this.items.length; ++i)
+          this.friendnames = [];
+          for (var i = 0; i < this.items.length; ++i)
             this.friendnames.push(this.items[i]["name"]);
-            console.log(this.friendnames);
-            this.friend_ids = [];
-            for (var i = 0; i < this.items.length; ++i)
-            this.friend_ids.push(this.items[i]["name"]);
-            console.log(this.friend_ids);
+          console.log(this.friendnames);
+          this.friend_ids = [];
+          for (var i = 0; i < this.items.length; ++i)
+            this.friend_ids.push(this.items[i]["user_id"]);
+          console.log(this.friend_ids);
         }
         else {
           this.presentToast("User not found");
@@ -82,9 +84,9 @@ export class AddContactToFriends {
   addContactAsFriend(item) {
     this.items = [];
     this.friend_id = item.user_id;
-    this.own_id = this.storageH.getID();
-    this.conv.push({"user_id": this.friend_id.toString() });
-    this.conv.push({"user_id": this.own_id.toString() });
+    this.ownID = this.storageH.getID();
+    this.conv.push({ "user_id": this.friend_id.toString() });
+    this.conv.push({ "user_id": this.ownID.toString() });
 
     this.conv.sort(function (a, b) {
       var nameA = a.user_id.toLowerCase(), nameB = b.user_id.toLowerCase();
@@ -97,7 +99,7 @@ export class AddContactToFriends {
 
     this.convstr = this.conv[0].user_id + ":" + this.conv[1].user_id;
     this.userDataC.conv = this.convstr;
-    
+
     if (this.userDataC.conv) {
       this.authService.postData(this.userDataC, "addContactAsFriend").then((result) => {
         this.responseDataC = result;

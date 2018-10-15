@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      {{ item.username }}
+      {{ item.name }}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -14,8 +14,14 @@
         <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>
-    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown">
+    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown && !item.isGroup">
       <ion-card-content>
+        <p>{{ messages[i].message }}</p>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown && item.isGroup" >
+      <ion-card-content>
+        <b>{{ messages[i].author }}</b>
         <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>

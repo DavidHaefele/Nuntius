@@ -34,19 +34,23 @@ export class StorageHandlerProvider {
   }
 
   getConv(item) {
-    var Convarr = [];
-    Convarr.push({ "username": this.user_id.toString() });
-    Convarr.push({ "username": item.user_id.toString() });
-    //console.log("Conv is "+ this.Convarr);
-    Convarr.sort(function (a, b) {
-      var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
-      if (nameA < nameB) //sort string ascending
-        return -1;
-      if (nameA > nameB)
-        return 1;
-      return 0; //default return value (no sorting)
-    });
+    if (!item.isGroup) {
+      var Convarr = [];
+      Convarr.push({ "username": this.user_id.toString() });
+      Convarr.push({ "username": item.ConvId.toString() });
+      //console.log("Conv is "+ this.Convarr);
+      Convarr.sort(function (a, b) {
+        var nameA = a.username.toLowerCase(), nameB = b.username.toLowerCase();
+        if (nameA < nameB) //sort string ascending
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0; //default return value (no sorting)
+      });
 
-    return (Convarr[0].username + ":" + Convarr[1].username).toString();
+      return (Convarr[0].username + ":" + Convarr[1].username).toString();
+    } else {
+      return item.ConvId.toString();
+    }
   }
 }

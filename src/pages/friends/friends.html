@@ -15,21 +15,23 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item-sliding id="color1" *ngFor="let item of items; let i = index">
+    <ion-item-sliding id="color1" *ngFor=" let item of conversationList; let item of items; let i = index">
       <button ion-item id="color2" (click)="openNavDetailsPage(item)">
         <!--<ion-avatar item-start>
-          <img src="../assets/icon/chat.svg.png">
+        <img src="../assets/icon/chat.svg.png">
         </ion-avatar>-->
-        <h2><b>{{item.username}}</b></h2>
-        <p style="color:white"><small>{{lastMsgArray[i]}}</small></p>
+        <h2><b>{{item.name}}</b></h2>
+        <p *ngIf="item.lastMsg != ''" style="color:white"><small><b>{{item.lastMsgAuthor}}</b>: {{item.lastMsg}}</small></p>
+        <p *ngIf="item.lastMsg == ''" style="color:white"><small>-</small></p>
       </button>
       <ion-item-options>
-        <button style="background-color:red; color:white" (click)="deleteFriend(item)"><ion-icon name="trash"></ion-icon> Entfernen</button>
+          <button style="background-color:red; color:white" (click)="doConfirm(item)"><ion-icon name="trash"></ion-icon> Entfernen</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
   <h2><p style="text-align: center; color: white;">{{ empty }}</p></h2>
 </ion-content>
 <ion-footer>
-  <button ion-fab id="color2" class="fixedButton" (click)="addContactToFriends()">+</button>
+  <button ion-fab id="color2" class="fixedButton" (click)="addContactToFriends()"><ion-icon name="contact"></ion-icon>+</button>
+  <button ion-fab id="color2" class="fixedButton1" (click)="createGroup()"><ion-icon name="contacts"></ion-icon>+</button>
 </ion-footer>

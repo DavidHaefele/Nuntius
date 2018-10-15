@@ -5,9 +5,9 @@ import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-about',
-  templateUrl: 'about.html'
+  templateUrl: 'settings.html'
 })
-export class AboutPage {
+export class SettingsPage {
   resetDesign: Boolean = false;
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, private alertCtrl: AlertController) {
 
