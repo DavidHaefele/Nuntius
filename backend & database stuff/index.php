@@ -5,8 +5,8 @@ require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
 
-$app->post('/login','login'); /* User login */
-$app->post('/signup','signup'); /* User Signup  */
+$app->post('/login','login');
+$app->post('/signup','signup');
 $app->post('/getFriends','getFriends');
 $app->post('/getAvailableContacts','getAvailableContacts');
 $app->post('/addContactAsFriend','addContactAsFriend');
@@ -17,13 +17,14 @@ $app->post('/lastMsg','lastMsg');
 $app->post('/deltaMsg','deltaMsg');
 $app->post('/getID','getID');
 $app->post('/getName','getName');
-$app->post('/getFriend','getFriend');
+//$app->post('/getFriend','getFriend');
 $app->post('/createGroup','createGroup');
 $app->post('/getGroups','getGroups');
 $app->post('/isAdmin','isAdmin');
 
 $app->run();
 
+//UP TO DATE
 //login a user with valid data
 function login() {
 
@@ -50,24 +51,24 @@ function login() {
         }
 
         $db = null;
-         if($userData){
-               $userData = json_encode($userData);
-                echo '{"userData": ' .$userData . '}';
-            } else {
-               echo '{"error":{"text":"Bad request wrong username and password"}}';
-            }
-
-
+        if($userData){
+			$userData = json_encode($userData);
+            echo '{"userData": ' .$userData . '}';
+        } else {
+            echo '{"error":{"text":"Bad request wrong username and password"}}';
+        }
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
 
+//Up TO DATE
 //get all contacts of the current user
 function getFriends() {
-        $request = \Slim\Slim::getInstance()->request();
-        $data = json_decode($request->getBody());
+    $request = \Slim\Slim::getInstance()->request();
+    $data = json_decode($request->getBody());
+
     try {
 		//Get all the conversations, where the user ID is present
         $db = getDB();
@@ -126,13 +127,13 @@ function getFriends() {
         } else {
             echo '{"error":{"text":"no user data"}}';
 		}
-
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
 
+//UP TO DATE
 //get all groups of the current user
 function getGroups() {
 	$request = \Slim\Slim::getInstance()->request();
@@ -152,17 +153,16 @@ function getGroups() {
 		$db = null;
 		$grouplist = '';
 		if($mainCount != 0){
-				$p = 0;
-				//put everything together and send it back to typescript
-                foreach($userData as $row) {
-					$usernameResult = '';
-					if($p == 0){
-						$grouplist = '{"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
-					}else{
-						$grouplist = $grouplist.',"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
-					}
-					$p++;
+			$p = 0;
+			//put everything together and send it back to typescript
+            foreach($userData as $row) {
+				if($p == 0){
+					$grouplist = '{"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
+				}else{
+					$grouplist = $grouplist.',"group'.$p.'":{"name":"'.$row['name'].'","group_id":"'.$row['group_id'].'"}';
 				}
+				$p++;
+			}
 		}else{
 			echo '{"error":{"text":"empty response"}}';
 			return;
@@ -170,52 +170,52 @@ function getGroups() {
 		$grouplist = '{"grouplist":'.$grouplist.'}}';
 		echo $grouplist;
 		return;
-		
-	echo '{"error":{"text":"empty response"}}';
-
+		echo '{"error":{"text":"empty response"}}';
 	}catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}';
 	}
 }
 
+//UP TO DATE
 //return all available contacts found for the specific input
 function getAvailableContacts() {
-        $request = \Slim\Slim::getInstance()->request();
-        $data = json_decode($request->getBody());
-        try {
-        $db = getDB();
-        $userData ='';
-        $username=$data->username;
-        $sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $userData = $stmt->fetchAll();
-
-        $db = null;
-        if($userData){
-                    $endresult ='';
-                foreach($userData as $row) {
-                    $endresult = $endresult.$row['username'].':'.$row['user_id'].':';
-                }
-                if(!empty($endresult)){
-                    $endresult = json_encode($endresult);
-                    echo '{"userData": ' . $endresult . '}';
-                }
-                else {
-                    echo '{"error":{"text":"empty response"}}';
-                }
-
-            } else {
-               echo '{"error":{"text":"no user data"}}';
-            }
-
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
-    }
+	$request = \Slim\Slim::getInstance()->request();
+    $data = json_decode($request->getBody());
+    try {
+		$db = getDB();
+		$userData ='';
+		$username=$data->username;
+		$sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+		$mainCount= $stmt->rowCount();
+		$userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+		$userData = $stmt->fetchAll();
+	    
+		$db = null;
+		if($mainCount != 0){
+			$p = 0;
+			foreach($userData as $row) {
+				if($p == 0){
+					$endresult = '{"contact'.$p.'":{"username":"'.$row["username"].'","user_id":"'.$row["user_id"].'"}';
+				}else{
+					$endresult = $endresult.',"contact'.$p.'":{"username":"'.$row["username"].'","user_id":"'.$row["user_id"].'"}';
+				}
+				$p++;
+			}
+			$endresult = '{"contactlist":'.$endresult.'}}';
+			echo $endresult;
+			return;
+		} else {
+			echo '{"error":{"text":"no user data"}}';
+			return;
+	    }
+	}catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
+	}
 }
 
+//UP TO DATE
 //Check if a user is an admin of a group
 function isAdmin(){
 	$request = \Slim\Slim::getInstance()->request();
@@ -241,93 +241,90 @@ function isAdmin(){
     }
 }
 
+//OUT DATED
+/*
 //return a userID to a username
 function getFriend() {
-        $request = \Slim\Slim::getInstance()->request();
-        $data = json_decode($request->getBody());
-        try {
-        $db = getDB();
-        $userData ='';
-        $username=$data->username;
-        $sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $userData = $stmt->fetchAll();
+    $request = \Slim\Slim::getInstance()->request();
+    $data = json_decode($request->getBody());
+    try {
+		$db = getDB();
+		$userData ='';
+		$username=$data->username;
+		$sql = "SELECT user_id,username FROM users WHERE username LIKE '%".$username."%'";
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+	    $userData = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+	    $userData = $stmt->fetchAll();
 
-        $db = null;
-        if($userData){
-                    $endresult ='';
-                foreach($userData as $row) {
-                    $endresult = $endresult.$row['username'].':'.$row['user_id'].':';
-                }
-                if(!empty($endresult)){
-                    $endresult = json_encode($endresult);
-                    echo '{"userData": ' . $endresult . '}';
-                }
-                else {
-                    echo '{"error":{"text":"empty response"}}';
-                }
-
-            } else {
-               echo '{"error":{"text":"no user data"}}';
-            }
-
-    }
-    catch(PDOException $e) {
-        echo '{"error":{"text":'. $e->getMessage() .'}}';
+		$db = null;
+		if($userData){
+			$endresult ='';
+		    foreach($userData as $row) {
+				$endresult = $endresult.$row['username'].':'.$row['user_id'].':';
+		    }
+		    if(!empty($endresult)){
+				$endresult = json_encode($endresult);
+		        echo '{"userData": ' . $endresult . '}';
+		    }else {
+				echo '{"error":{"text":"empty response"}}';
+		    }
+		} else {
+			echo '{"error":{"text":"no user data"}}';
+		}
+	}catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+*/
 
+//UP TO DATE
 //add a found contact as a friend
 function addContactAsFriend() {
     $request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
-
     try {
-
-            $db = getDB();
-            $userData = 'test';
-            $sql = "SELECT identifier FROM total_message WHERE identifier=:conv";
-            $stmt = $db->prepare($sql);
-            $stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
-            $stmt->execute();
-            $mainCount=$stmt->rowCount();
-            $created=time();
-            if($mainCount==0)
-            {
-
-                /*Inserting conversation*/
-                $sql1="INSERT INTO total_message(identifier, total_messages)VALUES(:conv,0)";
-                $stmt1 = $db->prepare($sql1);
-                $stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
-                $stmt1->execute();
-
-            }
-
-            $db = null;
-
-
-            if($userData){
-               $userData = json_encode($userData);
-                echo '{"userDataC": ' .$userData . '}';
-            } else {
-               echo '{"error":{"text":"Enter valid data"}}';
-			}
-
+		$db = getDB();
+        $userData = '';
+		$conv = $data->conv;
+		$sql = "SELECT identifier FROM total_message WHERE identifier=:conv";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("conv", $data->conv,PDO::PARAM_STR);
+        $stmt->execute();
+        $stmt->execute();
+        $mainCount=$stmt->rowCount();
+        $created=time();
+        if($mainCount==0)
+        {
+			/*Inserting conversation*/
+            $sql1="INSERT INTO total_message(identifier, total_messages)VALUES(:conv,0)";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->bindParam("conv", $data->conv,PDO::PARAM_STR);
+            $stmt1->execute();
+			$userData = "success";
+		}
+		$db = null;
+		if($userData == "success"){
+            echo '{"success": "true"}';
+			return;
+        } else {
+           echo '{"success": "false"}';
+		   return;
+		}
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
 
+//UP TO DATE
+//create a group in the groups table
 function createGroup() {
   $request = \Slim\Slim::getInstance()->request();
   $data = json_decode($request->getBody());
 
   try {
   $db = getDB();
-  $userData = '{"error":{"text":"Group created!"}}';
   //Inserting group name and members
   $sql1="INSERT INTO groups(name, members,admins,total_messages)VALUES(:name, :members,:admins, 0)";
   $stmt1 = $db->prepare($sql1);
@@ -336,12 +333,11 @@ function createGroup() {
   $stmt1->bindParam("admins", $data->admin,PDO::PARAM_STR);
   $stmt1->execute();
   $db = null;
-  if($userData){
-	$userData = json_encode($userData);
-		echo '{"groupData": ' .$userData . '}';
+  if($db == null){
+		echo '{"success": "true"}';
 		return;
 	} else {
-		echo '{"error":{"text":"Enter valid data"}}';
+		echo '{"success": "false"}';
 		return;
 	}
   }catch(PDOException $e) {
@@ -349,6 +345,7 @@ function createGroup() {
   }
 }
 
+//UP TO DATE
 //add a message to a conversation
 function sendMessage() {
     $request = \Slim\Slim::getInstance()->request();
@@ -387,10 +384,9 @@ function sendMessage() {
         $stmt2->execute();
         $db = null;
         if($total){
-            $total = json_encode($total);
-            echo '{"total": ' .$total . '}';
+            echo '{"total": "' .$total . '"}';
         } else {
-            echo '{"error":{"text":"Error in else"}}';
+            echo '{"error":"Error in else"}';
         }
     }
     catch(PDOException $e) {
@@ -398,32 +394,37 @@ function sendMessage() {
     }
 }
 
+/*
+//UP TO DATE
+//Does not seem to be needed
 //get the ID to a username
 function getID(){
 	$request = \Slim\Slim::getInstance()->request();
     $data = json_decode($request->getBody());
     try {
+		$db = getDB();
+        $sql1="SELECT user_id FROM `users` WHERE username='".$data."'";
+        $stmt1 = $db->prepare($sql1);
+        $stmt1->execute();
+		$user_id = $stmt1->fetch(PDO::FETCH_OBJ);
+        $db = null;
 
-            $db = getDB();
-            $sql1="SELECT user_id FROM `users` WHERE username='".$data."'";
-            $stmt1 = $db->prepare($sql1);
-            $stmt1->execute();
-			$user_id = $stmt1->fetch(PDO::FETCH_OBJ);
-            $db = null;
-
-            if($user_id){
-               $user_id = json_encode($user_id);
-                echo '{"user_id": ' .$user_id . '}';
-            } else {
-               echo '{"error":{"text":"Enter valid data"}}';            
-            }
-
+        if($user_id){
+            echo '{"user_id": "' .$user_id . '"}';
+			return;
+        } else {
+            echo '{"error":{"text":"Enter valid data"}}';
+			return;
+        }
     }
     catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+*/
 
+/*
+//UP TO DATE
 //get a name to a username (?same as getFriend?)
 function getName(){
 	$request = \Slim\Slim::getInstance()->request();
@@ -440,8 +441,7 @@ function getName(){
 
 
             if($username){
-               $username = json_encode($username);
-                echo '{"username": ' .$username . '}';
+                echo '{"username": "' .$username . '"}';
             } else {
                echo '{"error":{"text":"Enter valid data"}}';            
             }
@@ -451,7 +451,9 @@ function getName(){
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+*/
 
+//UP TO DATE
 //get all the messages in a conversation
 function displayMessages() {
     $request = \Slim\Slim::getInstance()->request();
@@ -506,6 +508,7 @@ function displayMessages() {
     }
 }
 
+//UP TO DATE
 //delete a conversation
 function deleteConv() {
     $request = \Slim\Slim::getInstance()->request();
@@ -576,6 +579,7 @@ function deleteConv() {
     }
 }
 
+//UP TO DATE
 //get the last message of a conversation
 function lastMsg() {
     $request = \Slim\Slim::getInstance()->request();
@@ -618,6 +622,7 @@ function lastMsg() {
     }
 }
 
+//UP TO DATE
 //get weather there are new messages or not
 function deltaMsg() {
     $request = \Slim\Slim::getInstance()->request();
@@ -658,8 +663,7 @@ function deltaMsg() {
     }
 }
 
-
-
+//UP TO DATE
 // User registration
 function signup() {
 	$request = \Slim\Slim::getInstance()->request();
@@ -717,7 +721,8 @@ function signup() {
     }
 }
 
-
+/*
+//UP TO DATE
 // internal Username Details
 function internalUserDetails($input) {
 
@@ -735,7 +740,7 @@ function internalUserDetails($input) {
     } catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
-
+	
 }
-
+*/
 ?>

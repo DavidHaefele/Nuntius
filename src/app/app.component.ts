@@ -19,6 +19,7 @@ export class MyApp {
     });
   }
 
+  //revert the user back to the welcome screen
   backToWelcome() {
     const root = this.app.getRootNav();
     this.menu.enable(false);
@@ -26,8 +27,9 @@ export class MyApp {
     this.nav.setRoot(this.rootPage);
   }
 
+  //remove the current user data
   logout() {
-    //Api Token Logout 
+    //Api Token Logout
     localStorage.clear();
     this.menu.enable(false);
     setTimeout(() => this.backToWelcome(), 1000);

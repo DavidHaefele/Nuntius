@@ -17,7 +17,6 @@ export class FriendsPage {
   ownname = this.storageH.getUsername();
   own_id = this.storageH.getID();
   empty: String = "Hier sieht es noch leer aus :/";
-  canFindFriends: Boolean = true;
   conversationList = [{ "conversationNr": "", "name": "", "ConvId": "", "isGroup": false, "lastMsg": "", "lastMsgAuthor": "" }];
   conversationNr = 0;
 
@@ -66,7 +65,6 @@ export class FriendsPage {
     if (userData) {
       this.authService.postData(userData, "getFriends").then((result) => {
         var response: any = result;
-
         //Add the found contacts to the local storage, a friendarray and to the visible items
         if (response) {
           for (let friend in response.friendlist) {

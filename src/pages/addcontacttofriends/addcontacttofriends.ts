@@ -18,17 +18,11 @@ import { FriendsPage } from '../friends/friends';
 export class AddContactToFriends {
 
   items = [];
-  responseData: any;
   userData = { "username": "" };
+  friends = [];
   friendnames = [];
   friend_ids = [];
-  friend_id: any;
   ownID = this.storageH.getID();
-  conv = [];
-  convstr: any;
-  responseDataC: any;
-  respC: any;
-  userDataC = { "conv": "" };
 
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
   }
@@ -36,37 +30,23 @@ export class AddContactToFriends {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Login');
   }
-
+  
   //Returns a list of found accounts depending on the search
   getAvailableContacts() {
     this.items = [];
     if (this.userData.username) {
+      console.log("getting contacts");
       this.authService.postData(this.userData, "getAvailableContacts").then((result) => {
-        this.responseData = result;
-        if (this.responseData.userData) {
-          let resp = JSON.stringify(this.responseData.userData);
-          console.log("All available contacts found: " + resp);
-          var friends = resp.split(":");
-          friends[0] = friends[0].substring(1);
-          friends.pop();
-          for (var i = 0; i < friends.length; i++) {
-            if (friends[i + 1] != this.ownID) {
-              console.log(friends[i]);
-              if (i % 2 == 0) {
-                this.items.push({ 'name': friends[i], 'user_id': friends[i + 1] });
-              }
+        console.log(JSON.stringify(result));
+        let responseData: any = result;
+        if (responseData.contactlist) {
+          for (let contact in responseData.contactlist) {
+            if (responseData.contactlist[contact].user_id != this.ownID) {
+              this.items.push({ 'username': responseData.contactlist[contact].username, 'user_id': responseData.contactlist[contact].user_id });
+              this.friends.push({ "username": responseData.contactlist[contact].username, "user_id": responseData.contactlist[contact].user_id });
             }
           }
-          this.friendnames = [];
-          for (var i = 0; i < this.items.length; ++i)
-            this.friendnames.push(this.items[i]["name"]);
-          console.log(this.friendnames);
-          this.friend_ids = [];
-          for (var i = 0; i < this.items.length; ++i)
-            this.friend_ids.push(this.items[i]["user_id"]);
-          console.log(this.friend_ids);
-        }
-        else {
+        }else {
           this.presentToast("User not found");
         }
       }, (err) => {
@@ -77,18 +57,19 @@ export class AddContactToFriends {
     else {
       this.presentToast("Empty input field");
     }
-
   }
 
+  //REWORK NEEDED (JSON.stringify is outdated) --------------------- check getGroups() in friends.ts
   //Add a chosen account to your friend list
   addContactAsFriend(item) {
     this.items = [];
-    this.friend_id = item.user_id;
+    var friend_id = item.user_id;
     this.ownID = this.storageH.getID();
-    this.conv.push({ "user_id": this.friend_id.toString() });
-    this.conv.push({ "user_id": this.ownID.toString() });
+    let conv = [];
+    conv.push({ "user_id": friend_id.toString() });
+    conv.push({ "user_id": this.ownID.toString() });
 
-    this.conv.sort(function (a, b) {
+    conv.sort(function (a, b) {
       var nameA = a.user_id.toLowerCase(), nameB = b.user_id.toLowerCase();
       if (nameA < nameB) //sort string ascending
         return -1;
@@ -96,15 +77,14 @@ export class AddContactToFriends {
         return 1;
       return 0; //default return value (no sorting)
     });
+    let userData = { "conv": "" };
+    userData.conv = conv[0].user_id + ":" + conv[1].user_id;
 
-    this.convstr = this.conv[0].user_id + ":" + this.conv[1].user_id;
-    this.userDataC.conv = this.convstr;
-
-    if (this.userDataC.conv) {
-      this.authService.postData(this.userDataC, "addContactAsFriend").then((result) => {
-        this.responseDataC = result;
-        if (this.responseDataC.userDataC) {
-          this.respC = JSON.stringify(this.responseDataC.userDataC);
+    if (userData.conv) {
+      this.authService.postData(userData, "addContactAsFriend").then((result) => {
+        console.log(JSON.stringify(result));
+        let response:any = result;
+        if (response.success) {
           this.presentToast(item.name + " hinzugefügt");
           this.navCtrl.pop();
           this.items = [];
@@ -120,8 +100,8 @@ export class AddContactToFriends {
     else {
       this.presentToast("Bad Error");
     }
-
   }
+
   /* NOT NEEDED - still leaving it in for later usage. Takes a name and returns the coherent ID.
   getID(name: any) {
     console.log("checking the ID of " + name);

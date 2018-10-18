@@ -42,7 +42,7 @@ export class CreateGroup {
     console.log('ionViewDidLoad Login');
   }
 
-  
+  //REWORK NEEDED (JSON.stringify is outdated) --------------------- check getGroups() in friends.ts
   //searches for users in database
   getFriend() {
     this.items = [];
@@ -137,8 +137,7 @@ export class CreateGroup {
       {
         this.authService.postData(this.groupData, "createGroup").then((result) => {
           let responseData: any = result;
-          if (responseData.groupData) {
-            let resp = JSON.stringify(responseData.groupData);
+          if (responseData.success) {
             this.presentToast('"' + this.groupData.name + '"' + " wurde hinzugefügt");
             this.navCtrl.pop();
             this.items = [];
