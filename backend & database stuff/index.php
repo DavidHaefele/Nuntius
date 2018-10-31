@@ -15,8 +15,8 @@ $app->post('/displayMessages','displayMessages');
 $app->post('/deleteConv','deleteConv');
 $app->post('/lastMsg','lastMsg');
 $app->post('/deltaMsg','deltaMsg');
-$app->post('/getID','getID');
-$app->post('/getName','getName');
+//$app->post('/getID','getID');
+//$app->post('/getName','getName');
 //$app->post('/getFriend','getFriend');
 $app->post('/createGroup','createGroup');
 $app->post('/getGroups','getGroups');
@@ -384,7 +384,7 @@ function sendMessage() {
         $stmt2->execute();
         $db = null;
         if($total){
-            echo '{"total": "' .$total . '"}';
+            echo '{"total": ' .$total . '}';
         } else {
             echo '{"error":"Error in else"}';
         }

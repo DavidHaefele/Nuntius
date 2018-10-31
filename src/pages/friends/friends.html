@@ -21,17 +21,17 @@
         <img src="../assets/icon/chat.svg.png">
         </ion-avatar>-->
         <h2><b>{{item.name}}</b></h2>
-        <p *ngIf="item.lastMsg != ''" style="color:white"><small><b>{{item.lastMsgAuthor}}</b>: {{item.lastMsg}}</small></p>
-        <p *ngIf="item.lastMsg == ''" style="color:white"><small>-</small></p>
+        <p *ngIf="item.lastMsg != ''"><small><b>{{item.lastMsgAuthor}}</b>: {{item.lastMsg}}</small></p>
+        <p *ngIf="item.lastMsg == ''"><small>-</small></p>
       </button>
       <ion-item-options>
           <button style="background-color:red; color:white" (click)="doConfirm(item)"><ion-icon name="trash"></ion-icon> Entfernen</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <h2><p style="text-align: center; color: white;">{{ empty }}</p></h2>
+  <h2><p style="text-align: center;">{{ empty }}</p></h2>
 </ion-content>
 <ion-footer>
-  <button ion-fab id="color2" class="fixedButton" (click)="addContactToFriends()"><ion-icon name="contact"></ion-icon>+</button>
-  <button ion-fab id="color2" class="fixedButton1" (click)="createGroup()"><ion-icon name="contacts"></ion-icon>+</button>
+  <button ion-fab class="fixedButton" (click)="addContactToFriends()"><ion-icon name="contact"></ion-icon>+</button>
+  <button ion-fab class="fixedButton1" (click)="createGroup()"><ion-icon name="contacts"></ion-icon>+</button>
 </ion-footer>

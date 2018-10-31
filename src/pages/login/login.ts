@@ -34,6 +34,7 @@ export class Login {
         console.log(this.resposeData);
         if (this.resposeData.userData) {
           localStorage.setItem('userData', JSON.stringify(this.resposeData));
+          localStorage.setItem("design", "blue");
           this.navCtrl.push(TabsPage);
         }
         else {

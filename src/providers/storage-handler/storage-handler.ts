@@ -10,7 +10,6 @@ import { Injectable } from '@angular/core';
 export class StorageHandlerProvider {
   name: any;
   user_id: any;
-  design: String = "blue";
   data: String = "";
 
   constructor() {

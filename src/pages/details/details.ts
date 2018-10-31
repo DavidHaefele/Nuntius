@@ -24,6 +24,8 @@ export class Details {
   ContentHeight: any;
   displayedMessages = 0;
   isGroup: Boolean = false;
+  msgOut: any = { "conv": "", "message": "", "author": "", "groupMessage": false };
+
 
   scrollToBottom() {
     this.content.scrollToBottom();
@@ -138,20 +140,20 @@ export class Details {
 
   //send a message to the other account or group
   msgSend() {
-    let msgOut: any = { "conv": "", "message": "", "author": "", "groupMessage": false };
-    msgOut.conv = "";
-    msgOut.author = "";
-    msgOut.conv = this.storageH.getConv(this.item);
-    console.log("Conv is" + msgOut.conv);
-    msgOut.groupMessage = this.item.isGroup;
-    msgOut.author = this.storageH.getID().toString();
-    console.log("Message Out: conv=" + msgOut.conv + " message=" + msgOut.message + " author=" + msgOut.author + " groupMessage=" + msgOut.groupMessage.toString());
-    if (msgOut) {
+    this.msgOut = { "conv": "", "message": "", "author": "", "groupMessage": false };
+    this.msgOut.conv = "";
+    this.msgOut.author = "";
+    this.msgOut.conv = this.storageH.getConv(this.item);
+    console.log("Conv is" + this.msgOut.conv);
+    this.msgOut.groupMessage = this.item.isGroup;
+    this.msgOut.author = this.storageH.getID().toString();
+    console.log("Message Out: conv=" + this.msgOut.conv + " message=" + this.msgOut.message + " author=" + this.msgOut.author + " groupMessage=" + this.msgOut.groupMessage.toString());
+    if (this.msgOut) {
       //Api connections
-      this.authService.postData(msgOut, "sendMessage").then((result) => {
+      this.authService.postData(this.msgOut, "sendMessage").then((result) => {
         var respose: any = result;
         if (respose.total) {
-          console.log("Message Nr." + respose.total + " \"" + msgOut.message + "\" send from " + msgOut.author);
+          console.log("Message Nr." + respose.total + " \"" + this.msgOut.message + "\" send from " + this.msgOut.author);
           this.displayMessages();
           if (this.currentScrollPosition > 209) {
             console.log("scrolling to bottom");
