@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
-import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { StorageHandlerProvider } from '../../providers/storage-handler';
 import { FriendsPage } from '../friends/friends';
 
 /**
@@ -24,16 +24,6 @@ export class CreateGroup {
   friendnames = [];
   friend_ids = [];
   members = [];
-  /*
-
-  
-  responseData: any;
-  resp: any;
-  
-
-  friends = [];
-  
-  */
 
   constructor(public navCtrl: NavController, public authService: AuthService, private toastCtrl: ToastController, public storageH: StorageHandlerProvider) {
   }
@@ -41,10 +31,34 @@ export class CreateGroup {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Login');
   }
-
-  //REWORK NEEDED (JSON.stringify is outdated) --------------------- check getGroups() in friends.ts
+  
   //searches for users in database
   getFriend() {
+    console.log("!!!!!!!!!!!!!!!!!!Looking for friends of " + this.storageH.getUsername());
+    this.items = [];
+    if (this.userData.username) {
+      console.log("getting contacts");
+      this.authService.postData(this.userData, "getAvailableContacts").then((result) => {
+        console.log(JSON.stringify(result));
+        let responseData: any = result;
+        if (responseData.contactlist) {
+          for (let contact in responseData.contactlist) {
+            if (responseData.contactlist[contact].user_id != this.ownID) {
+              this.items.push({ 'username': responseData.contactlist[contact].username, 'user_id': responseData.contactlist[contact].user_id });
+            }
+          }
+        } else {
+          this.presentToast("User not found");
+        }
+      }, (err) => {
+        //Connection failed message
+        this.presentToast("Could not connect to the server");
+      });
+    }
+    else {
+      this.presentToast("Empty input field");
+    }
+    /*
     this.items = [];
     if (this.userData.username) {
       this.authService.postData(this.userData, "getAvailableContacts").then((result) => {
@@ -84,6 +98,32 @@ export class CreateGroup {
       this.presentToast("Empty input field");
     }
     console.log("Members in Group " + (1 + this.members.length));
+    */
+    /*this.items = [];
+    if (this.userData.username) {
+      console.log("getting contacts");
+      this.authService.postData(this.userData, "getAvailableContacts").then((result) => {
+        console.log(JSON.stringify(result));
+        let responseData: any = result;
+        if (responseData.contactlist) {
+          for (let contact in responseData.contactlist) {
+            if (responseData.contactlist[contact].user_id != this.ownID) {
+              this.items.push({ 'username': responseData.contactlist[contact].username, 'user_id': responseData.contactlist[contact].user_id });
+              this.friends.push({ "username": responseData.contactlist[contact].username, "user_id": responseData.contactlist[contact].user_id });
+            }
+          }
+        }else {
+          this.presentToast("User not found");
+        }
+      }, (err) => {
+        //Connection failed message
+        this.presentToast("Could not connect to the server");
+      });
+    }
+    else {
+      this.presentToast("Empty input field");
+    }
+    */
   }
 
   removeFriend(item) {
@@ -100,10 +140,10 @@ export class CreateGroup {
   
   //adds members and combines them to string
   addMember(item) {
-    this.items = [];
-    let member = ({ 'name': item.name, 'user_id': item.user_id });
+    let member = ({ 'username': item.username, 'user_id': item.user_id });
     this.members.push(member);
     console.log("Members in Group " + (1 + this.members.length));
+    this.items = [];
   }
   
   //actually creates new group in database

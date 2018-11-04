@@ -524,7 +524,7 @@ function deleteConv() {
 			//delete the group if admin deletes it
 			if($asAdmin == true && $isGroup == true){
 				$sql = "DELETE FROM groups WHERE group_id = $conv";
-			
+
 			//remove user from group
 			}else if($asAdmin == false && $isGroup == true){
 				$sql2 = "SELECT members FROM groups WHERE group_id = $conv";
@@ -552,7 +552,7 @@ function deleteConv() {
 				$sql = 'UPDATE groups SET members = "5:7" WHERE group_id = "8"';
 			//remove conversation between two users
 			}else if($isGroup == false){
-				$sql = "DELETE FROM messages WHERE identifier_message_number LIKE '%".$conv."%'";
+				$sql = 'DELETE FROM total_message WHERE identifier LIKE "%'.$conv.'%"';
 			}
             $stmt = $db->prepare($sql);
             $stmt->execute();

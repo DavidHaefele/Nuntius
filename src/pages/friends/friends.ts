@@ -4,7 +4,7 @@ import { Details } from '../details/details';
 import { AuthService } from "../../providers/auth-service";
 import { SplitPane } from '../../providers/split-pane';
 import { AlertController } from 'ionic-angular';
-import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { StorageHandlerProvider } from '../../providers/storage-handler';
 import { AddContactToFriends } from '../addcontacttofriends/addcontacttofriends';
 import { CreateGroup } from '../creategroup/creategroup';
 
@@ -109,7 +109,6 @@ export class FriendsPage {
           this.items.push({ 'name': response.grouplist[group]["name"], "ConvId": response.grouplist[group]["group_id"], "isGroup": true });
           this.sortItems();
           //console.log("Found group with name " + response.grouplist[group]['name']);
-
         }
         //this.testvar[0] = "1";
       } else {

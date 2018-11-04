@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
-import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { StorageHandlerProvider } from '../../providers/storage-handler';
 import { FriendsPage } from '../friends/friends';
 
 /**
@@ -58,8 +58,7 @@ export class AddContactToFriends {
       this.presentToast("Empty input field");
     }
   }
-
-  //REWORK NEEDED (JSON.stringify is outdated) --------------------- check getGroups() in friends.ts
+  
   //Add a chosen account to your friend list
   addContactAsFriend(item) {
     this.items = [];
@@ -79,10 +78,8 @@ export class AddContactToFriends {
     });
     let userData = { "conv": "" };
     userData.conv = conv[0].user_id + ":" + conv[1].user_id;
-
     if (userData.conv) {
       this.authService.postData(userData, "addContactAsFriend").then((result) => {
-        console.log(JSON.stringify(result));
         let response:any = result;
         if (response.success) {
           this.presentToast(item.name + " hinzugefügt");

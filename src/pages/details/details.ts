@@ -1,13 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, ToastController, App } from 'ionic-angular';
 import { AuthService } from "../../providers/auth-service";
-import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
+import { StorageHandlerProvider } from '../../providers/storage-handler';
 //import { Content } from 'ionic-angular';
 //import { empty } from 'rxjs/Observer';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
-
-//TODO Handle group chats diffrently from normal chats
 @Component({
   selector: 'page-details',
   templateUrl: 'details.html',
@@ -140,7 +138,6 @@ export class Details {
 
   //send a message to the other account or group
   msgSend() {
-    this.msgOut = { "conv": "", "message": "", "author": "", "groupMessage": false };
     this.msgOut.conv = "";
     this.msgOut.author = "";
     this.msgOut.conv = this.storageH.getConv(this.item);
@@ -171,6 +168,7 @@ export class Details {
     else {
       this.presentToast("Messgage not send. Try again!");
     }
+  this.msgOut.message = "";
   }
   
   //check for new messages on reloading

@@ -2,7 +2,6 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { AuthService } from '../providers/auth-service';
 import { SplitPane } from '../providers/split-pane';
 
 import { HttpModule } from "@angular/http";
@@ -20,8 +19,8 @@ import { WelcomeSlidesPage } from "../pages/welcomeslides/welcomeslides";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { AuthServiceProvider } from '../providers/auth-service/auth-service';
-import { StorageHandlerProvider } from '../providers/storage-handler/storage-handler';
+import { AuthService } from '../providers/auth-service';
+import { StorageHandlerProvider } from '../providers/storage-handler';
 import { SettingsService } from '../providers/settings-service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
@@ -64,7 +63,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
     StatusBar,
     SplashScreen, AuthService, SplitPane, LocalNotifications,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthServiceProvider,
+    AuthService,
     SettingsService,
     StorageHandlerProvider
   ]
