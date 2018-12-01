@@ -83,6 +83,7 @@ export class FriendsPage {
       }, (err) => {
         //Connection failed message
         this.presentToast("Could not connect to the server");
+        console.log("Error: " + err);
       });
     }
     else {
@@ -117,6 +118,7 @@ export class FriendsPage {
     }, (err) => {
       //Connection failed message
       this.presentToast("Could not connect to the server");
+      console.log("Error: " + err);
     });
   }
   

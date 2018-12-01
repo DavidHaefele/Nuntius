@@ -52,6 +52,7 @@ export class AddContactToFriends {
       }, (err) => {
         //Connection failed message
         this.presentToast("Could not connect to the server");
+        console.log("Error: "+err);
       });
     }
     else {

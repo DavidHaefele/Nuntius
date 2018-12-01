@@ -109,7 +109,7 @@ export class Details {
       //Api connections
       this.authService.postData(userData, "displayMessages").then((result) => {
         var response: any = result;
-        if (result) {
+        if (response) {
           for (let message in response.messagelist) {
             if (response.messagelist[message]["authorID"] == this.storageH.getID().toString()) {
               this.displayedMessages++;
@@ -128,6 +128,7 @@ export class Details {
       }, (err) => {
         //Connection failed message
         this.presentToast("Could not connect to the server");
+        console.log("Error: " + err);
        // this.presentToast("Connection failed. Error: " + err);
       });
     }
@@ -162,7 +163,7 @@ export class Details {
         }
       }, (err) => {
         //Connection failed message
-        this.presentToast("Connection failed. Error: "+err);
+        this.presentToast("Connection failed. Error: " + err);
         });
     }
     else {

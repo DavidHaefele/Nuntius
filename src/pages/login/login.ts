@@ -43,6 +43,7 @@ export class Login {
       }, (err) => {
         //Connection failed message
         this.presentToast("Could not connect to the server");
+        console.log("Error: " + err);
       });
     }
     else {
