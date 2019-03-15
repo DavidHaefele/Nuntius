@@ -11,7 +11,7 @@ let apiUrl = "http://localhost/PHP-Slim-Restful/api/";
 //let apiUrl = 'http://074e541f.ngrok.io/PHP-Slim-Restful/api/';
 
 //DH-URL
-//let apiUrl = 'http://5d187040.ngrok.io/PHP-Slim-Restful/api/';
+//let apiUrl = 'http://2177f74a.ngrok.io/PHP-Slim-Restful/api/';
 
 
 /*
@@ -28,6 +28,7 @@ export class AuthService {
   }
 
   postData(credentials, type) {
+
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       this.http.post(apiUrl + type, JSON.stringify(credentials), { headers: headers }).

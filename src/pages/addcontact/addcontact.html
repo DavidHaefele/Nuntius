@@ -9,11 +9,14 @@
     <ion-item>
       <ion-input type="text" placeholder="Username" [(ngModel)]="userData.username"></ion-input>
     </ion-item>
-    <button ion-button block color="primary" (click)="getAvailableContacts()">Suchen</button>
+    <button ion-button block color="primary" (click)="getFriend()">Suchen</button>
   </ion-list>
   <ion-list>
-    <button ion-item color="primary" *ngFor="let item of items" (click)="addContactAsFriend(item)">
-      <h2><b>{{ item.username }}</b></h2>
+    <button ion-item color="lightblue" *ngFor="let item of items" (click)="addFriend(item)">
+      <!--<ion-avatar item-start>
+    <img src="../assets/icon/chat.svg.png">
+  </ion-avatar>-->
+      <h2><b>{{ item.name }}</b></h2>
     </button>
   </ion-list>
 </ion-content>

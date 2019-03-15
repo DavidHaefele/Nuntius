@@ -1,10 +1,12 @@
 page-details {
   #content {
+    background: color($colors, energy);
   }
 }
 
 ion-card.friend {
   position: relative;
+  color: green;
   overflow: auto;
   right: 1px;
   width: 70%;
@@ -13,15 +15,15 @@ ion-card.friend {
 ion-card.own {
   position: relative;
   overflow: auto;
+  color: white;
   left: 25%;
   width: 70%;
-  background: white;
 }
 
 div.chat {
   position: relative;
   width: 100%;
-  margin-bottom : 110px;
+  padding-bottom: 160px;
 }
 
 div.input {

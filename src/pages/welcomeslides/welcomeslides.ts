@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
+import { StorageHandlerProvider } from '../../providers/storage-handler/storage-handler';
 import { AlertController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 
@@ -26,7 +27,7 @@ export class WelcomeSlidesPage {
     }
   ];
   resetDesign: Boolean = false;
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public storageH: StorageHandlerProvider, private alertCtrl: AlertController) {
 
   }
 

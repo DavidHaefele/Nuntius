@@ -14,14 +14,9 @@
         <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>
-    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown && !item.isGroup">
+    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown">
       <ion-card-content>
-        <p>{{ messages[i].message }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="friend" color="whiteblue" *ngIf="!messages[i].showown && item.isGroup" >
-      <ion-card-content>
-        <b>{{ messages[i].author }}</b>
+        <p style="text-align: left; color: black;" *ngIf="isGroup">{{ messages[i].author }}:</p>
         <p>{{ messages[i].message }}</p>
       </ion-card-content>
     </ion-card>

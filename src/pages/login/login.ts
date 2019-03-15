@@ -26,24 +26,23 @@ export class Login {
     console.log('ionViewDidLoad Login');
   }
 
-  //self explaining
   login() {
     if (this.userData.username && this.userData.password) {
       this.authService.postData(this.userData, "login").then((result) => {
         this.resposeData = result;
         console.log(this.resposeData);
         if (this.resposeData.userData) {
-          localStorage.setItem('userData', JSON.stringify(this.resposeData));
-          localStorage.setItem("design", "blue");
+          localStorage.setItem('userData', JSON.stringify(this.resposeData))
           this.navCtrl.push(TabsPage);
         }
         else {
           this.presentToast("Please give valid username and password");
         }
+
+
+
       }, (err) => {
         //Connection failed message
-        this.presentToast("Could not connect to the server");
-        console.log("Error: " + err);
       });
     }
     else {

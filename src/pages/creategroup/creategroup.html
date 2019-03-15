@@ -10,13 +10,13 @@
   </ion-item>
   <ion-item>Mitglieder:</ion-item>
   <ion-list>
-    <button ion-item color="lightblue" *ngFor="let item of members" (click)="removeFriend(item)">
-      <h2><b>{{ item.username }}</b></h2>
+    <button ion-item color="lightblue" *ngFor="let item of members">
+      <h2><b>{{ item }}</b></h2>
     </button>
   </ion-list>
   <button ion-button block color="primary" (click)="createGroup()">Gruppe erstellen</button>
 
-  <ion-item>Kontakte hinzufügen:</ion-item>
+  <ion-item>Mitglied hinzufügen:</ion-item>
   <ion-list>
     <ion-item>
       <ion-input type="text" placeholder="Username" [(ngModel)]="userData.username"></ion-input>
@@ -28,7 +28,7 @@
       <!--<ion-avatar item-start>
         <img src="../assets/icon/chat.svg.png">
       </ion-avatar>-->
-      <h2><b>{{ item.username }}</b></h2>
+      <h2><b>{{ item.name }}</b></h2>
     </button>
   </ion-list>
 </ion-content>

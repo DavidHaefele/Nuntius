@@ -4,26 +4,23 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Welcome } from '../pages/welcome/welcome';
 import { SplitPane } from '../providers/split-pane';
-import { SettingsService } from '../providers/settings-service';
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [SettingsService]
+  templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = Welcome;
-  chosenTheme : String;
-  @ViewChild(Nav) nav: Nav;
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, settings: SettingsService, public splitPane: SplitPane, public app: App, public menu: MenuController) {
+
+  @ViewChild(Nav) nav: Nav; 
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public splitPane: SplitPane, public app: App, public menu: MenuController) {
     platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
     });
-    settings.setTheme(localStorage.getItem("design"));
-    settings.getTheme().subscribe(val => this.chosenTheme = val);
   }
 
-  //revert the user back to the welcome screen
   backToWelcome() {
     const root = this.app.getRootNav();
     this.menu.enable(false);
@@ -31,9 +28,8 @@ export class MyApp {
     this.nav.setRoot(this.rootPage);
   }
 
-  //remove the current user data
   logout() {
-    //Api Token Logout
+    //Api Token Logout 
     localStorage.clear();
     this.menu.enable(false);
     setTimeout(() => this.backToWelcome(), 1000);

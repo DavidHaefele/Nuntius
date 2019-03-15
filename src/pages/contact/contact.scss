@@ -1,4 +1,11 @@
-page-friends {
+page-contact {
+  #color1 {
+    background: color($colors, energy);
+  }
+
+  #color2 {
+    background: color($colors, lightblue);
+  }
 }
 div.fixed {
     position: fixed;
@@ -14,16 +21,17 @@ button.absolute {
   height: 50px;
   bottom: 15px;
 }
-button.fixedButton {
-    float: right;
-    position: fixed;
-    right: 7%;
-    bottom: 10%;
-}
 
 button.fixedButton1 {
   float: left;
   position: fixed;
-  right: 82%;
+  left: 7%;
   bottom: 10%;
+}
+
+button.fixedButton2 {
+    float: right;
+    position: fixed;
+    right: 7%;
+    bottom: 10%;
 }

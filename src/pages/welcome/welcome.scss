@@ -1,6 +1,6 @@
 page-welcome {
   #welcome {
-
+    background: color($colors, energy);
 
     h1 {
       font-size: 52px;
@@ -15,5 +15,12 @@ page-welcome {
     .logo {
       height: 100px;
     }
+  }
+
+  div.GoText {
+    position: fixed;
+    margin-right: 30px;
+    text-align: center;
+    margin-top: 110px;
   }
 }

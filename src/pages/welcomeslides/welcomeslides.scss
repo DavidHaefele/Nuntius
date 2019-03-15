@@ -1,6 +1,7 @@
 page-welcomeslides {
 
   .toolbar-background {
+    background: #fff;
     border-color: transparent;
   }
 
@@ -26,8 +27,10 @@ page-welcomeslides {
     padding: 0 40px;
     font-size: 14px;
     line-height: 1.5;
+    color: #60646B;
 
     b {
+      color: #000000;
     }
   }
 }
